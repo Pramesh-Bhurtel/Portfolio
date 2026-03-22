@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fire Ninja | Maka Bosada Aag</title>
+    <meta name="description" content="Fire Ninja — a blazing arcade slash game. Slice fireballs, dodge bombs, and unleash the ultimate Fire Nova!">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔥</text></svg>">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="top-controls">
+        <button class="icon-btn" id="pause-toggle" onclick="togglePause()" aria-label="Pause and Shop">⏸ Pause &amp; Shop [Space]</button>
+    </div>
+
+    <div class="menus-container" id="menus-container">
+
+        <div class="shop-panel">
+            <h2>🛒 Upgrades</h2>
+            <div class="shop-grid">
+                <div class="upgrade-item" id="upg-base-fire">
+                    <div class="upg-info">
+                        <h3>🔥 Base Fire</h3>
+                        <p>+1 Power per slash</p>
+                        <span class="upg-cost">Cost: <span id="cost-base-fire">25</span></span>
+                    </div>
+                    <button class="buy-btn" onclick="buyUpgrade('baseFire')">Buy</button>
+                </div>
+
+                <div class="upgrade-item" id="upg-auto-spark">
+                    <div class="upg-info">
+                        <h3>⚡ Auto-Spark</h3>
+                        <p>+1 auto-point/sec</p>
+                        <span class="upg-cost">Cost: <span id="cost-auto-spark">100</span></span>
+                    </div>
+                    <button class="buy-btn" onclick="buyUpgrade('autoSpark')">Buy</button>
+                </div>
+
+                <div class="upgrade-item" id="upg-bellows">
+                    <div class="upg-info">
+                        <h3>⏱ Bellows</h3>
+                        <p>+0.5s Combo Window</p>
+                        <span class="upg-cost">Cost: <span id="cost-bellows">800</span></span>
+                    </div>
+                    <button class="buy-btn" onclick="buyUpgrade('bellows')">Buy</button>
+                </div>
+
+                <div class="upgrade-item" id="upg-shield">
+                    <div class="upg-info">
+                        <h3>🛡️ Flame Shield</h3>
+                        <p>Block 1 Bomb</p>
+                        <span class="upg-cost">Cost: <span id="cost-shield">2500</span></span>
+                    </div>
+                    <button class="buy-btn" onclick="buyUpgrade('shield')">Buy</button>
+                    <div class="shield-status hidden" id="shield-status">🛡 Active</div>
+                </div>
+            </div>
+            <button class="reset-btn" onclick="resetProgress()">⚠️ Wipe All Data (All-Time)</button>
+        </div>
+
+        <div class="skills-panel">
+            <h2>🔮 Skills</h2>
+            <div class="shop-grid">
+                <div class="upgrade-item" id="skill-nova">
+                    <div class="upg-info">
+                        <h3>💥 Fire Nova <kbd>A</kbd></h3>
+                        <p>Obliterate all targets!</p>
+                        <span class="upg-cost">Cost: <span id="cost-nova">500</span></span>
+                    </div>
+                    <button class="buy-btn skill-btn" onclick="triggerSkill('nova')">Cast</button>
+                </div>
+
+                <div class="upgrade-item" id="skill-freeze" data-req-level="5">
+                    <div class="upg-info">
+                        <h3>❄️ Time Freeze <kbd>S</kbd></h3>
+                        <p>Stop targets for 5s (Lvl 5)</p>
+                        <span class="upg-cost">Cost: <span id="cost-freeze">1000</span></span>
+                    </div>
+                    <button class="buy-btn skill-btn" onclick="triggerSkill('freeze')">Cast</button>
+                </div>
+
+                <div class="upgrade-item" id="skill-meteor" data-req-level="10">
+                    <div class="upg-info">
+                        <h3>☄️ Meteor Shower <kbd>D</kbd></h3>
+                        <p>Spawn 10 targets instantly (Lvl 10)</p>
+                        <span class="upg-cost">Cost: <span id="cost-meteor">1500</span></span>
+                    </div>
+                    <button class="buy-btn skill-btn" onclick="triggerSkill('meteor')">Cast</button>
+                </div>
+
+                <div class="upgrade-item" id="skill-spirit" data-req-level="15">
+                    <div class="upg-info">
+                        <h3>⚔️ Spirit Blade <kbd>W</kbd></h3>
+                        <p>Auto-slash targets for 5s (Lvl 15)</p>
+                        <span class="upg-cost">Cost: <span id="cost-spirit">4000</span></span>
+                    </div>
+                    <button class="buy-btn skill-btn" onclick="triggerSkill('spirit')">Cast</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="game-hud">
+        <div class="level-display">
+            ⭐ Lvl: <span id="player-level-display">1</span>
+            <div class="xp-bar-container">
+                <div class="xp-bar-fill" id="xp-bar-fill"></div>
+            </div>
+        </div>
+        <div class="rank-display">🎖️ Rank: <span id="rank-name">Spark</span></div>
+        <div class="score-display" id="score">🔥 Power: 0</div>
+        <div class="combo-display hidden" id="combo-container">
+            Combo <span id="combo">x1</span>
+            <div class="combo-timer-bar"></div>
+        </div>
+        <div class="total-display">📊 Total: <span id="number">0</span></div>
+    </div>
+
+    <div class="container" id="play-area">
+        <h1 class="bg-title">Fire Ninja</h1>
+
+        <div class="global-bg-fire"></div>
+
+        <div id="miss-overlay" class="miss-overlay hidden"></div>
+
+        <div id="game-state-overlay" class="state-overlay hidden">
+            <h2 id="state-title">PAUSED</h2>
+            <p id="state-desc">Press Space to resume.</p>
+        </div>
+
+        <div id="intro-guide" class="state-overlay">
+            <div class="intro-card">
+                <div class="intro-header">
+                    <div class="fire-icon">🔥</div>
+                    <h2 class="intro-title">FIRE NINJA</h2>
+                    <div class="fire-icon">🔥</div>
+                </div>
+                <div class="intro-body">
+                    <section class="intro-section">
+                        <h3>⚔️ THE MISSION</h3>
+                        <p>Slice the <strong>Fireballs</strong> and <strong>Stars</strong> to grow your Power. Reach the rank of <strong>Maka Bosada Aag</strong>!</p>
+                    </section>
+                    
+                    <section class="intro-section">
+                        <h3>🔮 POWER-UPS</h3>
+                        <p>Collect glowing orbs for <strong>Shields</strong>, <strong>Time Freeze</strong>, and <strong>Power Boosts</strong>.</p>
+                    </section>
+
+                    <section class="intro-section danger">
+                        <h3>💣 FATAL ERROR</h3>
+                        <p>Avoid <strong>Bombs</strong>. One slice resets your progress to zero. Only your <strong>High Score</strong> is eternal.</p>
+                    </section>
+
+                    <div class="intro-controls">
+                        <div class="control-item"><kbd>Space</kbd> <span>Pause / Shop</span></div>
+                        <div class="control-item"><kbd>A</kbd> <span>Fire Nova</span></div>
+                        <div class="control-item"><kbd>S</kbd> <span>Time Freeze</span></div>
+                        <div class="control-item"><kbd>D</kbd> <span>Meteor Shower</span></div>
+                        <div class="control-item"><kbd>W</kbd> <span>Spirit Blade</span></div>
+                    </div>
+                </div>
+                <button class="intro-start-btn" onclick="closeIntro()">
+                    <span>UNLEASH THE FIRE</span>
+                    <i class="btn-glow"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/dom.js"></script>
+    <script src="js/state.js"></script>
+    <script src="js/storage.js"></script>
+    <script src="js/audio.js"></script>
+    <script src="js/progression.js"></script>
+    <script src="js/combo.js"></script>
+    <script src="js/shop.js"></script>
+    <script src="js/effects.js"></script>
+    <script src="js/skills.js"></script>
+    <script src="js/spawner.js"></script>
+    <script src="js/physics.js"></script>
+    <script src="js/game.js"></script>
+</body>
+</html>

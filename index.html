@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pramesh Bhurtel</title>
+    
+    <meta name="description" content="Tech enthusiast blending programming with creative content. Computer Science student skilled in Python, Web Development, CapCut & Canva.">
+    <meta name="author" content="Pramesh Bhurtel">
+    <meta name="theme-color" content="#570000">
+    <meta name="robots" content="index, follow">
+    
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://prameshbhurtel.com.np">
+    <meta property="og:title" content="Pramesh Bhurtel | Portfolio">
+    <meta property="og:description" content="Passionate student driven by curiosity across technology, sports, and marketing.">
+    <meta property="og:image" content="https://prameshbhurtel.com.np/img.jpg">
+    <meta property="og:site_name" content="Pramesh Bhurtel">
+    
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Pramesh Bhurtel | Portfolio">
+    <meta name="twitter:description" content="Tech enthusiast blending programming with creative content.">
+    <meta name="twitter:image" content="https://prameshbhurtel.com.np/img.jpg">
+    <meta name="twitter:creator" content="@pramesh_bhurtel">
+    
+    <link rel="canonical" href="https://prameshbhurtel.com.np">
+    
+    <link rel="icon" type="image/jpeg" href="assets/images/img.jpg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "name": "Pramesh Bhurtel",
+      "url": "https://prameshbhurtel.com.np",
+      "image": "https://prameshbhurtel.com.np/assets/images/img.jpg",
+      "jobTitle": "Computer Science Student & Creative Content Creator",
+      "sameAs": [
+        "https://www.facebook.com/pramesh.bhurtel.12",
+        "https://www.instagram.com/pramesh_bhurtel/",
+        "https://github.com/Pramesh-Bhurtel",
+        "https://www.linkedin.com/in/prameshbhurtel/"
+      ],
+      "knowsAbout": ["Python", "Web Development", "CapCut", "Canva", "Creative Marketing"]
+    }
+    </script>
+    
+    <link rel="stylesheet" href="src/css/main.css">
+</head>
+<body>
+    <canvas id="grain-canvas" class="grain-canvas" aria-hidden="true"></canvas>
+    <div id="scroll-progress" class="scroll-progress" aria-hidden="true"></div>
+    <header id="navbar">
+        <nav class="nav-container">
+            <a href="#" id="site-logo" class="logo" aria-label="Go to top">
+                Pramesh <span class="logo-accent">Bhurtel</span>
+            </a>
+            
+            <button class="hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            
+            <ul class="nav-menu" id="nav-menu" role="menubar">
+                <li role="none"><a href="#home" class="nav-link active" role="menuitem">Home</a></li>
+                <li role="none"><a href="#about" class="nav-link" role="menuitem">About</a></li>
+                <li role="none"><a href="#projects" class="nav-link" role="menuitem">Projects</a></li>
+                <li role="none"><a href="#contact" class="nav-link" role="menuitem">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section id="home" class="hero">
+            <div class="container">
+                <div class="hero-content">
+                    <div class="hero-text">
+                        <p class="greeting">Hello, I'm Pramesh Bhurtel</p>
+                        <h1 class="hero-title">
+                            <span id="typing-text">Computer Science</span>
+                            <span class="cursor" aria-hidden="true">|</span>
+                        </h1>
+                        <p class="hero-quote">Expanding skills and discovering new ways to innovate</p>
+                        <div class="hero-buttons">
+                            <button id="download-cv-btn" class="glow-genz-button" aria-label="Download my CV">
+                                Download CV
+                            </button>
+                            <a id="cv-download-link" href="assets/Pramesh-Bhurtel-Resume.pdf" download aria-hidden="true" tabindex="-1"></a>
+                        </div>
+                        <div class="hero-social" aria-label="Social links">
+                            <a href="https://www.facebook.com/pramesh.bhurtel.12" class="social-link" aria-label="Facebook" target="_blank" rel="noopener noreferrer">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                                    <path d="M22 12a10 10 0 10-11.5 9.9v-7h-2.2V12h2.2V9.8c0-2.2 1.3-3.4 3.3-3.4.95 0 1.95.17 1.95.17v2.1h-1.07c-1.05 0-1.38.66-1.38 1.34V12h2.35l-.38 2.9h-1.97v7A10 10 0 0022 12z"/>
+                                </svg>
+                            </a>
+                            <a href="https://www.instagram.com/pramesh_bhurtel/" class="social-link" aria-label="Instagram" target="_blank" rel="noopener noreferrer">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                                    <path d="M7.75 2h8.5A5.75 5.75 0 0 1 22 7.75v8.5A5.75 5.75 0 0 1 16.25 22h-8.5A5.75 5.75 0 0 1 2 16.25v-8.5A5.75 5.75 0 0 1 7.75 2zm0 1.5A4.25 4.25 0 0 0 3.5 7.75v8.5A4.25 4.25 0 0 0 7.75 20.5h8.5a4.25 4.25 0 0 0 4.25-4.25v-8.5A4.25 4.25 0 0 0 16.25 3.5h-8.5zm4.25 4a5.25 5.25 0 1 1 0 10.5 5.25 5.25 0 0 1 0-10.5zm0 1.5a3.75 3.75 0 1 0 0 7.5 3.75 3.75 0 0 0 0-7.5zm5.5-.75a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
+                                </svg>
+                            </a>
+                            <a href="https://github.com/Pramesh-Bhurtel" class="social-link" aria-label="GitHub" target="_blank" rel="noopener noreferrer">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                                    <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                                </svg>
+                            </a>
+                            <a href="https://www.linkedin.com/in/prameshbhurtel/" class="social-link" aria-label="LinkedIn" target="_blank" rel="noopener noreferrer">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                                    <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="hero-visual">
+                        <div class="avatar-container">
+                            <button class="sun-core" type="button" aria-label="Click to see a random photo">
+                                <img src="assets/images/img.jpg" alt="Pramesh Bhurtel">
+                            </button>
+                            <button class="orbit-icon html random-orbit" type="button" aria-label="HTML">
+                                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg" alt="HTML">
+                            </button>
+                            <button class="orbit-icon css random-orbit" type="button" aria-label="CSS">
+                                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg" alt="CSS">
+                            </button>
+                            <button class="orbit-icon js random-orbit" type="button" aria-label="JavaScript">
+                                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" alt="JavaScript">
+                            </button>
+                            <button class="orbit-icon python random-orbit" type="button" aria-label="Python">
+                                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" alt="Python">
+                            </button>
+                            <button class="orbit-icon random-orbit" type="button" aria-label="Capcut">
+                                <img src="https://cdn.jsdelivr.net/gh/callback-io/allogo@main/public/logos/capcut/icon.svg" alt="Capcut">
+                            </button>
+                            <button class="orbit-icon random-orbit" type="button" aria-label="Canva">
+                                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/canva/canva-original.svg" alt="Canva">
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="about" class="section">
+            <div class="container">
+                <h2 class="section-title">About Me</h2>
+                <div class="about-content">
+                    <div class="about-text slide-in-left">
+                        <p>I'm Pramesh, a passionate student driven by curiosity across technology, sports, and marketing. From programming and cybersecurity to creative fan engagement, I love blending innovation with strategy. My goal is to keep learning, build meaningful projects, and create lasting impact through tech and community.</p>
+                        <div class="skills">
+                            <h3>Skills & Technologies</h3>
+                            <div class="skills-grid">
+                                <span class="skill-tag">HTML</span>
+                                <span class="skill-tag">CSS</span>
+                                <span class="skill-tag">JavaScript</span>
+                                <span class="skill-tag">Python</span>
+                                <span class="skill-tag">Capcut</span>
+                                <span class="skill-tag">Canva</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="about-visual slide-in-right">
+                        <div class="code-animation">
+                            <div class="code-line">const developer = {</div>
+                            <div class="code-line indent">name: 'Pramesh',</div>
+                            <div class="code-line indent">role: 'Student',</div>
+                            <div class="code-line indent">interests: ['technology', 'sports', 'marketing'],</div>
+                            <div class="code-line indent">goal: 'Build meaningful projects'</div>
+                            <div class="code-line">};</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="projects" class="section">
+            <div class="container">
+                <h2 class="section-title">My Projects & Experiences</h2>
+                <div class="projects-grid slide-in-up">
+                    <article class="project-card">
+                        <div class="project-image">
+                            <img src="assets/images/gorkhas.spirit.jpg" alt="Gorkhas Spirit" loading="lazy">
+                        </div>
+                        <div class="project-content">
+                            <h3>Gorkhas Spirit</h3>
+                            <p>A dedicated social media hub for Kathmandu Gorkhas, built to unite fans through engaging content, match updates, and interactive campaigns.</p>
+                            <div class="project-tech">
+                                <span>Facebook</span>
+                                <span>Instagram</span>
+                                <span>TikTok</span>
+                                <span>Canva</span>
+                                <span>Capcut</span>
+                            </div>
+                            <div class="project-links">
+                                <a href="https://www.facebook.com/gorkhas.spirit" class="project-link" target="_blank" rel="noopener noreferrer">Facebook</a>
+                                <a href="https://www.instagram.com/gorkhas.spirit" class="project-link" target="_blank" rel="noopener noreferrer">Instagram</a>
+                                <a href="https://www.tiktok.com/@gorkhas.spirit" class="project-link" target="_blank" rel="noopener noreferrer">TikTok</a>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="project-card">
+                        <div class="project-image">
+                            <img src="assets/images/pf.png" alt="Portfolio Website" loading="lazy">
+                        </div>
+                        <div class="project-content">
+                            <h3>Portfolio Website</h3>
+                            <p>A modern, responsive portfolio website designed to highlight projects, skills, and achievements with smooth animations and clean layout.</p>
+                            <div class="project-tech">
+                                <span>HTML</span>
+                                <span>CSS</span>
+                                <span>JavaScript</span>
+                            </div>
+                        </div>
+                    </article>
+                    
+                    <article class="project-card">
+                        <div class="project-image">
+                            <img src="assets/images/box.office.jpg" alt="Nepal Premier League S2" loading="lazy">
+                        </div>
+                        <div class="project-content">
+                            <h3>Nepal Premier League S2</h3>
+                            <p>Box Office Volunteer during the Nepal Premier League. Handled ticket sales, crowd coordination, and customer queries during match days.</p>
+                            <div class="project-tech">
+                                <span>Khalti Events</span>
+                                <span>Empowerment Hub</span>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="project-card">
+                        <div class="project-image">
+                            <img src="assets/images/fire_ninja.png" alt="Fire Ninja Game" loading="lazy">
+                        </div>
+                        <div class="project-content">
+                            <h3>Fire Ninja</h3>
+                            <p>A blazing arcade slash game where you slice fireballs, dodge bombs, and unleash the ultimate Fire Nova with smooth physics.</p>
+                            <div class="project-tech">
+                                <span>HTML5 Canvas</span>
+                                <span>JavaScript</span>
+                                <span>CSS3</span>
+                            </div>
+                            <div class="project-links">
+                                <a href="Fire Ninja/index.html" class="project-link" target="_blank" rel="noopener noreferrer">Play Game</a>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact" class="section">
+            <div class="container">
+                <h2 class="section-title">Get In Touch</h2>
+                <div class="contact-content">
+                    <div class="contact-info slide-in-left">
+                        <p>Let's collaborate! I am always open to discussing exciting projects and new opportunities.</p>
+                        <div class="contact-details">
+                            <div class="contact-item">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                                    <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+                                </svg>
+                                <a class="contact-link" href="mailto:contact@prameshbhurtel.com.np">contact@prameshbhurtel.com.np</a>
+                            </div>
+                            <div class="contact-item">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                                    <path d="M6.62 10.79c1.44 2.83 3.76 5.15 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/>
+                                </svg>
+                                <a class="contact-link" href="tel:+9779846236703">+977 9846236703</a>
+                            </div>
+                            <div class="contact-item">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                                    <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+                                </svg>
+                                <a class="contact-link" href="https://www.google.com/maps/search/?api=1&query=Kathmandu%2C+Nepal" target="_blank" rel="noopener noreferrer">Kathmandu, Nepal</a>
+                            </div>
+                        </div>
+                        <div class="social-links">
+                            <a href="https://www.facebook.com/pramesh.bhurtel.12" class="social-link" aria-label="Facebook" target="_blank" rel="noopener noreferrer">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                                    <path d="M22 12a10 10 0 10-11.5 9.9v-7h-2.2V12h2.2V9.8c0-2.2 1.3-3.4 3.3-3.4.95 0 1.95.17 1.95.17v2.1h-1.07c-1.05 0-1.38.66-1.38 1.34V12h2.35l-.38 2.9h-1.97v7A10 10 0 0022 12z"/>
+                                </svg>
+                            </a>
+                            <a href="https://www.instagram.com/pramesh_bhurtel/" class="social-link" aria-label="Instagram" target="_blank" rel="noopener noreferrer">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                                    <path d="M7.75 2h8.5A5.75 5.75 0 0 1 22 7.75v8.5A5.75 5.75 0 0 1 16.25 22h-8.5A5.75 5.75 0 0 1 2 16.25v-8.5A5.75 5.75 0 0 1 7.75 2zm0 1.5A4.25 4.25 0 0 0 3.5 7.75v8.5A4.25 4.25 0 0 0 7.75 20.5h8.5a4.25 4.25 0 0 0 4.25-4.25v-8.5A4.25 4.25 0 0 0 16.25 3.5h-8.5zm4.25 4a5.25 5.25 0 1 1 0 10.5 5.25 5.25 0 0 1 0-10.5zm0 1.5a3.75 3.75 0 1 0 0 7.5 3.75 3.75 0 0 0 0-7.5zm5.5-.75a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
+                                </svg>
+                            </a>
+                            <a href="https://github.com/Pramesh-Bhurtel" class="social-link" aria-label="GitHub" target="_blank" rel="noopener noreferrer">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                                    <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                                </svg>
+                            </a>
+                            <a href="https://www.linkedin.com/in/prameshbhurtel/" class="social-link" aria-label="LinkedIn" target="_blank" rel="noopener noreferrer">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                                    <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="contact-form slide-in-right">
+                        <form id="contact-form" novalidate>
+                            <div class="form-group">
+                                <label for="name">Name</label>
+                                <input type="text" id="name" name="name" placeholder="Your name" required>
+                                <span class="error-message">Please enter your name</span>
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Email</label>
+                                <input type="email" id="email" name="email" placeholder="your.email@example.com" required>
+                                <span class="error-message">Please enter a valid email</span>
+                            </div>
+                            <div class="form-group">
+                                <label for="subject">Subject</label>
+                                <input type="text" id="subject" name="subject" placeholder="What's this about?" required>
+                                <span class="error-message">Please enter a subject</span>
+                            </div>
+                            <div class="form-group">
+                                <label for="message">Message</label>
+                                <textarea id="message" name="message" placeholder="Your message here..." rows="5" required></textarea>
+                                <span class="error-message">Please enter your message</span>
+                            </div>
+                            <button type="submit" class="glow-genz-button">Send Message</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <div id="download-overlay" class="download-overlay" aria-hidden="true">
+        <div class="download-card" role="status" aria-live="polite">
+            <div class="download-spinner" aria-hidden="true"></div>
+            <div class="download-text">Preparing your CV...</div>
+        </div>
+    </div>
+
+    <div id="photo-modal" class="photo-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+        <div class="photo-modal-content">
+            <button class="close" aria-label="Close modal">&times;</button>
+            <img id="random-photo" src="" alt="Random inspiration">
+        </div>
+    </div>
+
+    <button id="scroll-top" class="scroll-top" aria-label="Scroll to top">↑</button>
+
+    <script type="module" src="src/js/app.js"></script>
+</body>
+</html>
