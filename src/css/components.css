@@ -1,14 +1,15 @@
 .skill-tag {
-  background: rgba(255, 56, 56, 0.1);
+  background: rgba(255, 255, 255, 0.03);
   color: var(--accent);
   padding: var(--space-sm) var(--space-md);
   border-radius: var(--radius-full);
   font-size: 0.9rem;
-  border: 1px solid var(--border-accent);
+  border: var(--glass-rim);
   transition: all var(--transition-smooth);
   position: relative;
   overflow: hidden;
-  backdrop-filter: blur(5px);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
 }
 
 .skill-tag::before {
@@ -72,9 +73,10 @@
   background: var(--glass-bg);
   padding: var(--space-xl);
   border-radius: var(--radius-lg);
-  border: 1px solid var(--glass-border);
-  backdrop-filter: blur(10px);
-  box-shadow: var(--shadow-lg);
+  border: var(--glass-rim);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  box-shadow: var(--shadow-lg), 0 0 30px rgba(0, 0, 0, 0.2);
 }
 
 .form-group {
@@ -158,8 +160,10 @@
 }
 
 .glow-genz-button {
-  background: transparent;
-  border: 2px solid var(--accent);
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: var(--glass-rim);
   border-radius: var(--radius-md);
   color: var(--accent);
   font-weight: 700;

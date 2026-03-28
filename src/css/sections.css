@@ -13,17 +13,33 @@
   color: var(--muted);
 }
 
-.skills h3 {
+.skills-themed {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-xl);
+  margin-top: var(--space-xl);
+}
+
+.skill-category h4 {
   color: var(--text);
-  margin-bottom: var(--space-lg);
-  font-size: 1.2rem;
+  font-size: 1rem;
+  margin-bottom: var(--space-md);
+  padding-left: var(--space-sm);
+  border-left: 3px solid var(--accent);
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
 .skills-grid {
   display: flex;
   flex-wrap: wrap;
   gap: var(--space-sm);
-  justify-content: center;
+}
+
+@media (min-width: 48rem) {
+  .skills-themed {
+    grid-template-columns: 1fr 1fr;
+  }
 }
 
 .about-visual {
@@ -34,16 +50,16 @@
 
 .code-animation {
   position: relative;
-  background: rgba(255, 255, 255, 0.03);
-  backdrop-filter: blur(45px) saturate(200%);
-  -webkit-backdrop-filter: blur(45px) saturate(200%);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: var(--glass-rim);
   border-radius: var(--radius-lg);
   padding: var(--space-xl);
   font-family: var(--font-mono);
   font-size: 1rem;
   color: var(--accent);
-  box-shadow: var(--shadow-lg), 0 0 20px rgba(0, 0, 0, 0.3);
+  box-shadow: var(--shadow-lg), 0 0 40px rgba(0, 0, 0, 0.4);
   animation: floatEffect 4s ease-in-out infinite;
   max-width: 100%;
   overflow-x: auto;
@@ -87,14 +103,14 @@
 
 .project-card {
   position: relative;
-  background: rgba(255, 255, 255, 0.02);
-  backdrop-filter: blur(40px);
-  -webkit-backdrop-filter: blur(40px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: var(--glass-rim);
   border-radius: var(--radius-lg);
   overflow: hidden;
   transition: all var(--transition-smooth);
-  box-shadow: var(--shadow-sm);
+  box-shadow: var(--shadow-md);
 }
 
 .project-card::before {
@@ -214,10 +230,11 @@
   gap: var(--space-2xl);
   margin-top: var(--space-2xl);
   background: var(--glass-bg);
-  backdrop-filter: blur(15px);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
   padding: var(--space-xl);
   border-radius: var(--radius-lg);
-  border: 1px solid var(--glass-border);
+  border: var(--glass-rim);
 }
 
 .contact-content::after {
@@ -319,32 +336,23 @@
   to { opacity: 1; transform: translateY(0); }
 }
 
+.slide-in-left.visible,
+.slide-in-right.visible,
+.slide-in-up.visible {
+  transform: translate(0) scale(1) rotate(0);
+  opacity: 1;
+}
+
+.slide-in-left { transform: translateX(-4rem) scale(0.95) rotate(-2deg); }
+.slide-in-right { transform: translateX(4rem) scale(0.95) rotate(2deg); }
+.slide-in-up { transform: translateY(4rem) scale(0.95); }
+
 .slide-in-left,
 .slide-in-right,
 .slide-in-up {
   opacity: 0;
-  transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 1s cubic-bezier(0.22, 1, 0.36, 1);
   will-change: transform, opacity;
-  will-change: transform, opacity;
-}
-
-.slide-in-left {
-  transform: translateX(-3.125rem);
-}
-
-.slide-in-right {
-  transform: translateX(3.125rem);
-}
-
-.slide-in-up {
-  transform: translateY(3.125rem);
-}
-
-.slide-in-left.visible,
-.slide-in-right.visible,
-.slide-in-up.visible {
-  transform: translate(0);
-  opacity: 1;
 }
 
 .reveal-init {

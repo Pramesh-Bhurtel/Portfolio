@@ -37,10 +37,26 @@ export function initScrollAnimations() {
   
   if (elements.length === 0) return;
 
+  let delayCounter = 0;
+  let lastTime = 0;
+
   const observer = new IntersectionObserver((entries) => {
+    const now = Date.now();
+    
+    // Reset delay counter if current batch is significantly separated in time from the previous
+    if (now - lastTime > 100) {
+      delayCounter = 0;
+    }
+    lastTime = now;
+
     entries.forEach(entry => {
       if (entry.isIntersecting) {
-        entry.target.classList.add('visible');
+        const el = entry.target;
+        // Apply staggered delay
+        el.style.transitionDelay = `${delayCounter * 0.15}s`;
+        el.classList.add('visible');
+        delayCounter++;
+        observer.unobserve(el);
       }
     });
   }, {

@@ -3,10 +3,11 @@
   top: 0;
   width: 100%;
   background: var(--glass-bg);
-  backdrop-filter: blur(20px) saturate(180%);
-  border-bottom: 1px solid var(--glass-border);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border-bottom: var(--glass-rim);
   z-index: 1000;
-  transition: background var(--transition-smooth), backdrop-filter var(--transition-smooth);
+  transition: all var(--transition-smooth);
 }
 
 #navbar::after {
