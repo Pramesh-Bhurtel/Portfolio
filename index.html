@@ -4,28 +4,37 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pramesh Bhurtel</title>
-    
     <meta name="description" content="Tech enthusiast blending programming with creative content. Computer Science student skilled in Python, Web Development, CapCut & Canva.">
     <meta name="author" content="Pramesh Bhurtel">
     <meta name="theme-color" content="#570000">
     <meta name="robots" content="index, follow">
     
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:locale" content="en_US">
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://prameshbhurtel.com.np">
+    <meta property="og:url" content="https://prameshbhurtel.com.np/">
     <meta property="og:title" content="Pramesh Bhurtel | Portfolio">
     <meta property="og:description" content="Passionate student driven by curiosity across technology, sports, and marketing.">
     <meta property="og:image" content="https://prameshbhurtel.com.np/assets/images/thumbnail.png">
+    <meta property="og:image:alt" content="Pramesh Bhurtel Portfolio Thumbnail">
+    <meta property="og:image:type" content="image/png">
     <meta property="og:site_name" content="Pramesh Bhurtel">
     
+    <!-- Twitter Card Meta Tags -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Pramesh Bhurtel | Portfolio">
     <meta name="twitter:description" content="Tech enthusiast blending programming with creative content.">
     <meta name="twitter:image" content="https://prameshbhurtel.com.np/assets/images/thumbnail.png">
+    <meta name="twitter:image:alt" content="Pramesh Bhurtel Portfolio Thumbnail">
     <meta name="twitter:creator" content="@pramesh_bhurtel">
+    <meta name="twitter:site" content="@pramesh_bhurtel">
     
-    <link rel="canonical" href="https://prameshbhurtel.com.np">
+    <link rel="canonical" href="https://prameshbhurtel.com.np/">
     
-    <link rel="icon" type="image/jpeg" href="assets/images/img.jpg">
+    <!-- Icons -->
+    <link rel="icon" type="image/png" href="assets/images/thumbnail.png">
+    <link rel="apple-touch-icon" href="assets/images/thumbnail.png">
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     
@@ -33,18 +42,32 @@
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
-      "@type": "Person",
-      "name": "Pramesh Bhurtel",
-      "url": "https://prameshbhurtel.com.np",
-      "image": "https://prameshbhurtel.com.np/assets/images/img.jpg",
-      "jobTitle": "Computer Science Student & Creative Content Creator",
-      "sameAs": [
-        "https://www.facebook.com/pramesh.bhurtel.12",
-        "https://www.instagram.com/pramesh_bhurtel/",
-        "https://github.com/Pramesh-Bhurtel",
-        "https://www.linkedin.com/in/prameshbhurtel/"
-      ],
-      "knowsAbout": ["Python", "Web Development", "CapCut", "Canva", "Creative Marketing"]
+      "@graph": [
+        {
+          "@type": "Person",
+          "@id": "https://prameshbhurtel.com.np/#person",
+          "name": "Pramesh Bhurtel",
+          "url": "https://prameshbhurtel.com.np",
+          "image": "https://prameshbhurtel.com.np/assets/images/thumbnail.png",
+          "jobTitle": "Computer Science Student & Creative Content Creator",
+          "sameAs": [
+            "https://www.facebook.com/pramesh.bhurtel.12",
+            "https://www.instagram.com/pramesh_bhurtel/",
+            "https://github.com/Pramesh-Bhurtel",
+            "https://www.linkedin.com/in/prameshbhurtel/"
+          ],
+          "knowsAbout": ["Python", "Web Development", "CapCut", "Canva", "Creative Marketing"]
+        },
+        {
+          "@type": "WebSite",
+          "@id": "https://prameshbhurtel.com.np/#website",
+          "url": "https://prameshbhurtel.com.np/",
+          "name": "Pramesh Bhurtel | Portfolio",
+          "publisher": {
+            "@id": "https://prameshbhurtel.com.np/#person"
+          }
+        }
+      ]
     }
     </script>
     
