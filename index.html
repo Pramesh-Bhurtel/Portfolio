@@ -54,7 +54,7 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap">
 
     <!-- Preload Critical Assets -->
-    <link rel="preload" as="image" href="assets/images/img.webp" fetchpriority="high">
+    <link rel="preload" as="image" href="assets/images/img-800.webp" imagesrcset="assets/images/img-400.webp 400w, assets/images/img-800.webp 800w" imagesizes="(max-width: 480px) 400px, 800px" fetchpriority="high">
     
     <!-- Critical CSS (Above the fold) -->
     <link rel="stylesheet" href="src/css/reset.css">
@@ -174,8 +174,8 @@
                         <div class="avatar-container">
                             <button class="sun-core" type="button" aria-label="Click to see a random photo">
                                 <picture>
-                                    <source srcset="assets/images/img.webp" type="image/webp">
-                                    <img src="assets/images/img.jpg" alt="Pramesh Bhurtel" width="400" height="400" fetchpriority="high">
+                                    <source srcset="assets/images/img-400.webp 400w, assets/images/img-800.webp 800w" sizes="(max-width: 480px) 400px, 800px" type="image/webp">
+                                    <img src="assets/images/img.jpg" alt="Pramesh Bhurtel" width="400" height="400" fetchpriority="high" decoding="sync">
                                 </picture>
                             </button>
                             <div class="orbit-wrapper random-orbit">
@@ -253,8 +253,8 @@
                     <article class="project-card">
                         <div class="project-image">
                             <picture>
-                                <source srcset="assets/images/gorkhas.spirit.webp" type="image/webp">
-                                <img src="assets/images/gorkhas.spirit.jpg" alt="Gorkhas Spirit" width="600" height="400" loading="lazy">
+                                <source srcset="assets/images/gorkhas.spirit-400.webp 400w, assets/images/gorkhas.spirit.webp 800w" sizes="(max-width: 480px) 400px, (max-width: 1024px) 600px, 800px" type="image/webp">
+                                <img src="assets/images/gorkhas.spirit.jpg" alt="Gorkhas Spirit" width="600" height="400" loading="lazy" decoding="async">
                             </picture>
                         </div>
                         <div class="project-content">
@@ -278,8 +278,8 @@
                     <article class="project-card">
                         <div class="project-image">
                             <picture>
-                                <source srcset="assets/images/pf.webp" type="image/webp">
-                                <img src="assets/images/pf.png" alt="Portfolio Website" width="600" height="400" loading="lazy">
+                                <source srcset="assets/images/pf-400.webp 400w, assets/images/pf.webp 800w" sizes="(max-width: 480px) 400px, (max-width: 1024px) 600px, 800px" type="image/webp">
+                                <img src="assets/images/pf.png" alt="Portfolio Website" width="600" height="400" loading="lazy" decoding="async">
                             </picture>
                         </div>
                         <div class="project-content">
@@ -296,8 +296,8 @@
                     <article class="project-card">
                         <div class="project-image">
                             <picture>
-                                <source srcset="assets/images/box.office.webp" type="image/webp">
-                                <img src="assets/images/box.office.jpg" alt="Nepal Premier League S2" width="600" height="400" loading="lazy">
+                                <source srcset="assets/images/box.office-400.webp 400w, assets/images/box.office.webp 800w" sizes="(max-width: 480px) 400px, (max-width: 1024px) 600px, 800px" type="image/webp">
+                                <img src="assets/images/box.office.jpg" alt="Nepal Premier League S2" width="600" height="400" loading="lazy" decoding="async">
                             </picture>
                         </div>
                         <div class="project-content">
@@ -313,8 +313,8 @@
                     <article class="project-card">
                         <div class="project-image">
                             <picture>
-                                <source srcset="assets/images/ViperHarmonics.webp" type="image/webp">
-                                <img src="assets/images/ViperHarmonics.png" alt="ViperHarmonics" width="600" height="400" loading="lazy">
+                                <source srcset="assets/images/ViperHarmonics-400.webp 400w, assets/images/ViperHarmonics.webp 512w" sizes="(max-width: 480px) 400px, 512px" type="image/webp">
+                                <img src="assets/images/ViperHarmonics.png" alt="ViperHarmonics" width="600" height="400" loading="lazy" decoding="async">
                             </picture>
                         </div>
                         <div class="project-content">
@@ -336,8 +336,8 @@
                     <article class="project-card">
                         <div class="project-image">
                             <picture>
-                                <source srcset="assets/images/fire_ninja.webp" type="image/webp">
-                                <img src="assets/images/fire_ninja.png" alt="Fire Ninja Game" width="600" height="400" loading="lazy">
+                                <source srcset="assets/images/fire_ninja-400.webp 400w, assets/images/fire_ninja.webp 800w" sizes="(max-width: 480px) 400px, (max-width: 1024px) 600px, 800px" type="image/webp">
+                                <img src="assets/images/fire_ninja.png" alt="Fire Ninja Game" width="600" height="400" loading="lazy" decoding="async">
                             </picture>
                         </div>
                         <div class="project-content">
