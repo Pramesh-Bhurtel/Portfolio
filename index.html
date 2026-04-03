@@ -49,6 +49,27 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     
+    <!-- Preload Critical Fonts -->
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap">
+
+    <!-- Preload Critical Assets -->
+    <link rel="preload" as="image" href="assets/images/img.webp" fetchpriority="high">
+    
+    <!-- Critical CSS (Above the fold) -->
+    <link rel="stylesheet" href="src/css/reset.css">
+    <link rel="stylesheet" href="src/css/tokens.css">
+    <link rel="stylesheet" href="src/css/navigation.css">
+    <link rel="stylesheet" href="src/css/hero.css">
+
+    <!-- Non-Critical CSS (Deferred) -->
+    <link rel="stylesheet" href="src/css/sections.css" media="print" onload="this.media='all'">
+    <link rel="stylesheet" href="src/css/components.css" media="print" onload="this.media='all'">
+    <noscript>
+        <link rel="stylesheet" href="src/css/sections.css">
+        <link rel="stylesheet" href="src/css/components.css">
+    </noscript>
+
     <!-- JSON-LD Structured Data -->
     <script type="application/ld+json">
     {
@@ -81,8 +102,9 @@
       ]
     }
     </script>
-    
-    <link rel="stylesheet" href="src/css/main.css">
+
+    <!-- Main JavaScript (Deferred by default with type="module") -->
+    <script type="module" src="src/js/app.js"></script>
 </head>
 <body>
     <canvas id="grain-canvas" class="grain-canvas" aria-hidden="true"></canvas>
@@ -431,6 +453,5 @@
 
     <button id="scroll-top" class="scroll-top" aria-label="Scroll to top">↑</button>
 
-    <script type="module" src="src/js/app.js"></script>
 </body>
 </html>

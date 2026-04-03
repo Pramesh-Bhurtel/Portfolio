@@ -1,8 +1,7 @@
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
+/* 
+  Main CSS entry point.
+  Note: @imports have been moved to direct <link> tags in index.html 
+  to prevent render-blocking request waterfalls and improve LCP.
+*/
 
-@import 'reset.css';
-@import 'tokens.css';
-@import 'navigation.css';
-@import 'hero.css';
-@import 'sections.css';
-@import 'components.css';
+/* Styles are now loaded directly in index.html for better performance */
