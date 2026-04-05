@@ -123,6 +123,7 @@
   min-height: var(--touch-target);
   width: 100%;
   justify-content: center;
+  transform: translate(var(--mag-x, 0px), var(--mag-y, 0px));
 }
 
 .nav-menu.active .nav-link {

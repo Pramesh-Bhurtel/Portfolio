@@ -1,4 +1,4 @@
-import { $, on } from './dom.js';
+import { $ } from './dom.js';
 import { Config } from './config.js';
 
 let currentPhraseIndex = 0;

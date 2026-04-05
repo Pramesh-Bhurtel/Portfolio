@@ -1,7 +1,0 @@
-/* 
-  Main CSS entry point.
-  Note: @imports have been moved to direct <link> tags in index.html 
-  to prevent render-blocking request waterfalls and improve LCP.
-*/
-
-/* Styles are now loaded directly in index.html for better performance */

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page Not Found | Pramesh Bhurtel</title>
+    <meta name="theme-color" content="#570000">
+    <meta name="robots" content="noindex, follow">
+    
+    <link rel="icon" type="image/webp" href="/assets/images/thumbnail.webp">
+    <link rel="icon" type="image/png" href="/assets/images/thumbnail.png">
+    <link rel="apple-touch-icon" href="/assets/images/thumbnail.png">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap">
+    <link rel="stylesheet" href="/src/css/reset.css">
+    <link rel="stylesheet" href="/src/css/tokens.css">
+    <link rel="stylesheet" href="/src/css/components.css">
+
+    <style>
+        .error-container {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: var(--space-xl);
+            background: radial-gradient(circle at center, rgba(30, 30, 30, 0.4) 0%, var(--bg-1) 100%);
+        }
+        
+        .error-404 {
+            font-size: clamp(6rem, 15vw, 10rem);
+            font-weight: 800;
+            color: transparent;
+            -webkit-text-stroke: 2px var(--accent);
+            text-shadow: 0 0 20px var(--accent-glow);
+            margin-bottom: var(--space-md);
+            letter-spacing: 5px;
+            font-family: var(--font-mono);
+            animation: pulseError 2s ease-in-out infinite alternate;
+        }
+
+        .error-title {
+            font-size: clamp(1.5rem, 5vw, 2.5rem);
+            color: var(--text);
+            margin-bottom: var(--space-lg);
+        }
+
+        .error-message {
+            color: var(--muted);
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin-bottom: var(--space-2xl);
+            line-height: 1.6;
+        }
+
+        @keyframes pulseError {
+            0% { text-shadow: 0 0 20px var(--accent-glow); transform: scale(1); }
+            100% { text-shadow: 0 0 40px var(--accent), 0 0 80px var(--accent-2); transform: scale(1.02); }
+        }
+    </style>
+</head>
+<body>
+    <canvas id="grain-canvas" class="grain-canvas" aria-hidden="true"></canvas>
+
+    <main class="error-container">
+        <h1 class="error-404">404</h1>
+        <h2 class="error-title">Page Not Found</h2>
+        <p class="error-message">The page you are looking for might have been removed, had its name changed, or is temporarily unavailable.</p>
+        
+        <a href="/" class="glow-genz-button">Return to Homepage</a>
+    </main>
+
+    <script type="module">
+        import { initGrains } from '/src/js/modules/grains.js';
+        document.addEventListener('DOMContentLoaded', initGrains);
+    </script>
+</body>
+</html>

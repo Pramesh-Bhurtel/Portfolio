@@ -1,4 +1,4 @@
-import { $, $$, on, scrollTo, debounce } from './dom.js';
+import { $, $$, on, scrollTo, throttle } from './dom.js';
 
 export function initNavigation() {
   const navbar = $('#navbar');
@@ -42,13 +42,13 @@ export function initNavigation() {
 
   sections.forEach(section => sectionObserver.observe(section));
 
-  const handleScroll = debounce(() => {
+  const handleScroll = throttle(() => {
     if (window.scrollY > 50) {
       navbar.classList.add('scrolled');
     } else {
       navbar.classList.remove('scrolled');
     }
-  }, 10);
+  }, 100);
 
   window.addEventListener('scroll', handleScroll, { passive: true });
 }

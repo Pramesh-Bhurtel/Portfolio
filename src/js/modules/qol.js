@@ -17,11 +17,13 @@ function initMagneticButtons() {
       const y = e.clientY - top - height / 2;
 
       // Magnetic pull: 30% of movement
-      el.style.transform = `translate(${x * 0.3}px, ${y * 0.3}px)`;
+      el.style.setProperty('--mag-x', `${x * 0.3}px`);
+      el.style.setProperty('--mag-y', `${y * 0.3}px`);
     });
 
     el.addEventListener('mouseleave', () => {
-      el.style.transform = '';
+      el.style.setProperty('--mag-x', `0px`);
+      el.style.setProperty('--mag-y', `0px`);
     });
   });
 }

@@ -113,7 +113,6 @@
     0 0 7.5rem rgba(255, 69, 0, 0.3),
     inset 0 0 1.875rem rgba(255, 69, 0, 0.4);
   animation: sunGlow 3s ease-in-out infinite alternate, floatHero 6s ease-in-out infinite;
-  cursor: pointer;
   transition: transform var(--transition-smooth);
   will-change: box-shadow, transform;
   overflow: hidden;

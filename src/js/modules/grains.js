@@ -1,12 +1,19 @@
 import { $ } from './dom.js';
 
+let isGrainsInitialized = false;
+
 export function initGrains() {
+  if (isGrainsInitialized) return;
+  isGrainsInitialized = true;
+
   const canvas = $('#grain-canvas');
   if (!canvas) return;
 
   const ctx = canvas.getContext('2d');
   let particles = [];
   let mouse = { x: -1000, y: -1000 };
+  
+  const accentColor = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim() || '#e11d48';
 
   function resize() {
     canvas.width = window.innerWidth;
@@ -34,7 +41,7 @@ export function initGrains() {
       };
       
       this.opacity = Math.random() * 0.3 + 0.1;
-      this.color = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim() || '#e11d48';
+      this.color = accentColor;
       this.friction = 0.98;
     }
 

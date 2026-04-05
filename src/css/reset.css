@@ -59,6 +59,11 @@ body::before {
   to { transform: translateY(-100px); }
 }
 
+@keyframes floatEffect {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
 a {
   color: var(--accent);
   text-decoration: none;

@@ -45,6 +45,7 @@
     <link rel="icon" type="image/webp" href="assets/images/thumbnail.webp">
     <link rel="icon" type="image/png" href="assets/images/thumbnail.png">
     <link rel="apple-touch-icon" href="assets/images/thumbnail.png">
+    <link rel="manifest" href="manifest.json">
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -110,7 +111,7 @@
     <canvas id="grain-canvas" class="grain-canvas" aria-hidden="true"></canvas>
     <div id="scroll-progress" class="scroll-progress" aria-hidden="true"></div>
     <header id="navbar">
-        <nav class="nav-container">
+        <nav class="nav-container" aria-label="Main navigation">
             <a href="#" id="site-logo" class="logo" aria-label="Go to top">
                 Pramesh <span class="logo-accent">Bhurtel</span>
             </a>
@@ -121,11 +122,11 @@
                 <span></span>
             </button>
             
-            <ul class="nav-menu" id="nav-menu" role="menubar">
-                <li role="none"><a href="#home" class="nav-link active" role="menuitem">Home</a></li>
-                <li role="none"><a href="#about" class="nav-link" role="menuitem">About</a></li>
-                <li role="none"><a href="#projects" class="nav-link" role="menuitem">Projects</a></li>
-                <li role="none"><a href="#contact" class="nav-link" role="menuitem">Contact</a></li>
+            <ul class="nav-menu" id="nav-menu">
+                <li><a href="#home" class="nav-link active">Home</a></li>
+                <li><a href="#about" class="nav-link">About</a></li>
+                <li><a href="#projects" class="nav-link">Projects</a></li>
+                <li><a href="#contact" class="nav-link">Contact</a></li>
             </ul>
         </nav>
     </header>
@@ -172,12 +173,12 @@
                     </div>
                     <div class="hero-visual">
                         <div class="avatar-container">
-                            <button class="sun-core" type="button" aria-label="Click to see a random photo">
+                            <div class="sun-core">
                                 <picture>
                                     <source srcset="assets/images/img-400.webp 400w, assets/images/img-800.webp 800w" sizes="(max-width: 480px) 400px, 800px" type="image/webp">
                                     <img src="assets/images/img.jpg" alt="Pramesh Bhurtel" width="400" height="400" fetchpriority="high" decoding="sync">
                                 </picture>
-                            </button>
+                            </div>
                             <div class="orbit-wrapper random-orbit">
                                 <button class="orbit-icon html" type="button" aria-label="HTML">
                                     <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg" alt="HTML">
@@ -437,6 +438,12 @@
         </section>
     </main>
 
+    <footer class="site-footer" style="padding: 2rem 0; text-align: center; color: var(--muted); border-top: 1px solid var(--border-accent);">
+        <div class="container">
+            <p>&copy; 2026 Pramesh Bhurtel. All rights reserved.</p>
+        </div>
+    </footer>
+
     <div id="download-overlay" class="download-overlay" aria-hidden="true">
         <div class="download-card" role="status" aria-live="polite">
             <div class="download-spinner" aria-hidden="true"></div>
@@ -444,12 +451,7 @@
         </div>
     </div>
 
-    <div id="photo-modal" class="photo-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
-        <div class="photo-modal-content">
-            <button class="close" aria-label="Close modal">&times;</button>
-            <img id="random-photo" src="" alt="Random inspiration">
-        </div>
-    </div>
+
 
     <button id="scroll-top" class="scroll-top" aria-label="Scroll to top">↑</button>
 

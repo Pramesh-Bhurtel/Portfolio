@@ -1,6 +1,4 @@
 let container = null;
-let counter = 0;
-
 export function initToast() {
   if (container) return;
   

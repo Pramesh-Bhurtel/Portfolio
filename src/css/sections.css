@@ -265,10 +265,11 @@
   margin-bottom: var(--space-md);
   color: var(--muted);
   transition: transform var(--transition-fast);
+  transform: translate(var(--mag-x, 0px), var(--mag-y, 0px));
 }
 
 .contact-item:hover {
-  transform: translateX(0.625rem);
+  transform: translate(calc(0.625rem + var(--mag-x, 0px)), var(--mag-y, 0px));
 }
 
 .contact-item svg {
@@ -286,40 +287,7 @@
   width: 100%;
 }
 
-.form-group {
-  margin-bottom: var(--space-md);
-  width: 100%;
-}
 
-.form-group label {
-  display: block;
-  margin-bottom: var(--space-xs);
-  color: var(--text);
-  font-weight: 500;
-  font-size: 0.9rem;
-}
-
-.form-group input,
-.form-group textarea {
-  width: 100%;
-  padding: var(--space-md);
-  background: rgba(255, 255, 255, 0.03);
-  backdrop-filter: blur(10px);
-  border: 1px solid var(--glass-border);
-  border-radius: var(--radius-md);
-  color: var(--text);
-  font-family: inherit;
-  font-size: 1rem;
-  transition: all var(--transition-fast);
-}
-
-.form-group input:focus,
-.form-group textarea:focus {
-  outline: none;
-  border-color: var(--accent);
-  background: rgba(255, 255, 255, 0.05);
-  box-shadow: 0 0 15px var(--accent-glow);
-}
 
 @keyframes slideInLeft {
   from { opacity: 0; transform: translateX(-3.125rem); }

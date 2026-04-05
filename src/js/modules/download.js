@@ -37,10 +37,4 @@ export function initDownloadCV() {
     startDownloadFlow();
   });
 
-  on(btn, 'keydown', (e) => {
-    if (e.key === 'Enter' || e.key === ' ') {
-      e.preventDefault();
-      startDownloadFlow();
-    }
-  });
 }

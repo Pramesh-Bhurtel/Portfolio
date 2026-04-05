@@ -1,0 +1,21 @@
+{
+  "name": "Pramesh Bhurtel Portfolio",
+  "short_name": "Pramesh",
+  "description": "Tech enthusiast blending programming with creative content. Computer Science student skilled in Python, Web Development, CapCut & Canva.",
+  "start_url": "/?source=pwa",
+  "display": "standalone",
+  "background_color": "#0A0A0A",
+  "theme_color": "#E11D48",
+  "icons": [
+    {
+      "src": "/assets/images/thumbnail.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/assets/images/thumbnail.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

@@ -35,10 +35,7 @@ export async function initContactForm() {
         showSuccess('Message sent successfully! I will get back to you soon.');
         form.reset();
       } else {
-        const formData = new FormData(form);
-        console.log('Form data:', Object.fromEntries(formData));
-        showSuccess('Message sent! (Demo mode - check console)');
-        form.reset();
+        showError('Email service is blocked or loading. Please email directly.');
       }
     } catch (error) {
       console.error('EmailJS Error:', error);

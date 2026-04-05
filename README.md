@@ -9,9 +9,10 @@ A modern, responsive personal portfolio website designed to showcase my skills, 
 ## 🚀 Key Features
 
 *   **Responsive Design**: Fully responsive layout that looks great on all devices (mobile, tablet, and desktop).
-*   **Modern Aesthetics**: Incorporates glassmorphism, smooth scrolling, and dynamic micro-animations.
-*   **SEO Optimized**: Fully equipped with structured data, Open Graph tags, Twitter Card metadata, and a robust sitemap to ensure high visibility across search engines and social media.
-*   **Interactive UI**: Includes an interactive navigation bar, typing effects, and a custom photo modal.
+*   **Modern Aesthetics**: Incorporates glassmorphism, smooth scrolling, and dynamic magnetic interactions heavily optimized with CSS variables.
+*   **Performance & Stability**: Robust vanilla JS modules free of memory leaks and UI thrashing, paired with aggressive server caching headers (`.htaccess`, `vercel.json`, `netlify.toml`).
+*   **SEO Optimized**: Fully equipped with Progressive Web App integration (`manifest.json`), structured data, Open Graph tags, Twitter Card metadata, and a robust sitemap to ensure high visibility across search engines and social media.
+*   **Interactive UI**: Includes an interactive navigation bar, typing effects, and liquid web animations.
 
 ## 💻 Tech Stack
 
