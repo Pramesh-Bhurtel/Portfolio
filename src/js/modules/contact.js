@@ -71,6 +71,11 @@ function loadEmailJS() {
       emailjs.init(Config.emailjs.publicKey);
     }
   };
+  script.onerror = () => {
+    import('./toast.js').then(module => {
+      module.showError('Email service blocked by browser or network.');
+    });
+  };
   document.head.appendChild(script);
 }
 

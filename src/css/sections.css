@@ -320,14 +320,12 @@
 .slide-in-up {
   opacity: 0;
   transition: all 1s cubic-bezier(0.22, 1, 0.36, 1);
-  will-change: transform, opacity;
 }
 
 .reveal-init {
   opacity: 0;
   transform: translateY(30px);
   transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-  will-change: transform, opacity;
 }
 
 .reveal-init.revealed {
@@ -361,4 +359,11 @@
   .projects-grid {
     grid-template-columns: repeat(auto-fit, minmax(21.875rem, 1fr));
   }
+}
+
+.site-footer {
+  padding: 2rem 0;
+  text-align: center;
+  color: var(--muted);
+  border-top: 1px solid var(--border-accent);
 }

@@ -32,6 +32,3 @@ export function showError(message, duration) {
   showToast(message, 'error', duration);
 }
 
-export function showInfo(message, duration) {
-  showToast(message, 'info', duration);
-}

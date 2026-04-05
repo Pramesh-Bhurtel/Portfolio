@@ -10,6 +10,7 @@
   overflow: hidden;
   backdrop-filter: var(--glass-blur);
   -webkit-backdrop-filter: var(--glass-blur);
+  transform: translate(var(--mag-x, 0px), var(--mag-y, 0px));
 }
 
 .skill-tag::before {
@@ -100,8 +101,8 @@
   border-radius: var(--radius-md);
   color: var(--text);
   font-size: 1rem;
+  font-family: inherit;
   transition: all var(--transition-fast);
-  outline: none;
 }
 
 .form-group input::placeholder,

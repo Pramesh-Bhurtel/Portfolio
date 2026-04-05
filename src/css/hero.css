@@ -15,7 +15,6 @@
 
 .hero-text {
   animation: slideInLeft 1s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-  will-change: transform, opacity;
   width: 100%;
 }
 
@@ -83,7 +82,6 @@
   display: flex;
   justify-content: center;
   animation: slideInRight 1s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-  will-change: transform, opacity;
   width: 100%;
 }
 
@@ -114,7 +112,6 @@
     inset 0 0 1.875rem rgba(255, 69, 0, 0.4);
   animation: sunGlow 3s ease-in-out infinite alternate, floatHero 6s ease-in-out infinite;
   transition: transform var(--transition-smooth);
-  will-change: box-shadow, transform;
   overflow: hidden;
   z-index: 10;
 }
@@ -140,7 +137,6 @@
   cursor: pointer;
   transition: all var(--transition-smooth);
   transform-origin: center center;
-  will-change: transform, box-shadow, background;
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid var(--glass-border);
   display: flex;

@@ -25,10 +25,17 @@ export function initScrollProgress() {
   const progressBar = $('#scroll-progress');
   if (!progressBar) return;
   
+  let ticking = false;
   on(window, 'scroll', () => {
-    const windowHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-    const scrolled = (window.scrollY / windowHeight) * 100;
-    progressBar.style.width = `${scrolled}%`;
+    if (!ticking) {
+      window.requestAnimationFrame(() => {
+        const windowHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+        const scrolled = (window.scrollY / windowHeight) * 100;
+        progressBar.style.width = `${scrolled}%`;
+        ticking = false;
+      });
+      ticking = true;
+    }
   }, { passive: true });
 }
 
@@ -73,11 +80,18 @@ export function initScrollTop() {
   
   if (!scrollBtn) return;
 
+  let ticking = false;
   on(window, 'scroll', () => {
-    if (window.scrollY > 300) {
-      scrollBtn.classList.add('visible');
-    } else {
-      scrollBtn.classList.remove('visible');
+    if (!ticking) {
+      window.requestAnimationFrame(() => {
+        if (window.scrollY > 300) {
+          scrollBtn.classList.add('visible');
+        } else {
+          scrollBtn.classList.remove('visible');
+        }
+        ticking = false;
+      });
+      ticking = true;
     }
   }, { passive: true });
 

@@ -38,9 +38,3 @@ export function initTypingEffect() {
   typeEffect();
 }
 
-export function destroyTypingEffect() {
-  if (typeInterval) {
-    clearTimeout(typeInterval);
-    typeInterval = null;
-  }
-}

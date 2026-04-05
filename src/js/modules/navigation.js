@@ -10,7 +10,12 @@ export function initNavigation() {
   on(hamburger, 'click', () => {
     hamburger.classList.toggle('active');
     navMenu.classList.toggle('active');
-    document.body.style.overflow = navMenu.classList.contains('active') ? 'hidden' : '';
+    
+    // Toggle aria-expanded for screen readers
+    const isExpanded = navMenu.classList.contains('active');
+    hamburger.setAttribute('aria-expanded', isExpanded);
+    
+    document.body.style.overflow = isExpanded ? 'hidden' : '';
   });
 
   navLinks.forEach(link => {
@@ -18,6 +23,7 @@ export function initNavigation() {
       e.preventDefault();
       hamburger.classList.remove('active');
       navMenu.classList.remove('active');
+      hamburger.setAttribute('aria-expanded', 'false');
       document.body.style.overflow = '';
       
       const href = link.getAttribute('href');
@@ -51,8 +57,4 @@ export function initNavigation() {
   }, 100);
 
   window.addEventListener('scroll', handleScroll, { passive: true });
-}
-
-export function scrollToSection(sectionId, offset = 80) {
-  scrollTo(`#${sectionId}`, offset);
 }
