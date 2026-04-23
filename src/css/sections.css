@@ -22,12 +22,15 @@
 
 .skill-category h4 {
   color: var(--text);
-  font-size: 1rem;
+  font-size: 1.1rem;
   margin-bottom: var(--space-md);
   padding-left: var(--space-sm);
   border-left: 3px solid var(--accent);
   text-transform: uppercase;
   letter-spacing: 1px;
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
 }
 
 .skills-grid {
@@ -362,8 +365,18 @@
 }
 
 .site-footer {
-  padding: 2rem 0;
+  padding: 3rem 0;
   text-align: center;
   color: var(--muted);
   border-top: 1px solid var(--border-accent);
+  background: linear-gradient(to top, rgba(225, 29, 72, 0.03), transparent);
+  margin-top: var(--space-3xl);
 }
+
+.footer-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-lg);
+}
+

@@ -1,4 +1,4 @@
-import { $, $$, on, scrollTo } from './dom.js';
+import { $, $$, on, smoothScrollTo } from './dom.js';
 
 export function initScrollReveal() {
   const revealElements = $$('.section-title, .project-card, .about-text, .about-visual, .contact-info, .contact-form');
@@ -23,7 +23,9 @@ export function initScrollReveal() {
 
 export function initScrollProgress() {
   const progressBar = $('#scroll-progress');
-  if (!progressBar) return;
+  const scrollBtn = $('#scroll-top');
+  
+  if (!progressBar && !scrollBtn) return;
   
   let ticking = false;
   on(window, 'scroll', () => {
@@ -31,7 +33,18 @@ export function initScrollProgress() {
       window.requestAnimationFrame(() => {
         const windowHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
         const scrolled = (window.scrollY / windowHeight) * 100;
-        progressBar.style.width = `${scrolled}%`;
+        
+        if (progressBar) {
+          progressBar.style.width = `${scrolled}%`;
+        }
+        
+        if (scrollBtn) {
+          if (window.scrollY > 300) {
+            scrollBtn.classList.add('visible');
+          } else {
+            scrollBtn.classList.remove('visible');
+          }
+        }
         ticking = false;
       });
       ticking = true;
@@ -77,27 +90,12 @@ export function initScrollAnimations() {
 export function initScrollTop() {
   const scrollBtn = $('#scroll-top');
   const logo = $('#site-logo');
-  
-  if (!scrollBtn) return;
 
-  let ticking = false;
-  on(window, 'scroll', () => {
-    if (!ticking) {
-      window.requestAnimationFrame(() => {
-        if (window.scrollY > 300) {
-          scrollBtn.classList.add('visible');
-        } else {
-          scrollBtn.classList.remove('visible');
-        }
-        ticking = false;
-      });
-      ticking = true;
-    }
-  }, { passive: true });
-
-  on(scrollBtn, 'click', () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  });
+  if (scrollBtn) {
+    on(scrollBtn, 'click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  }
 
   if (logo) {
     on(logo, 'click', (e) => {

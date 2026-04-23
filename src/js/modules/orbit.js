@@ -11,13 +11,6 @@ export function initOrbitAnimations() {
   const wrappers = $$('.orbit-wrapper');
   if (!wrappers.length) return;
 
-  const isMobile = window.innerWidth < 768;
-  const isSmallMobile = window.innerWidth < 480;
-
-  // Base radius and step adjusted for mobile to prevent overflow
-  const baseRadius = isSmallMobile ? 3.5 : (isMobile ? 4.5 : 7.5);
-  const radiusStep = isSmallMobile ? 1.0 : (isMobile ? 1.5 : 2.5);
-  
   // Inject a single universal orbiting keyframe set if not exists
   if (!document.getElementById('orbit-keyframes')) {
     const style = document.createElement('style');
@@ -36,7 +29,7 @@ export function initOrbitAnimations() {
     document.head.appendChild(style);
   }
 
-  wrappers.forEach((wrapper, index) => {
+  wrappers.forEach((wrapper) => {
     const icon = wrapper.querySelector('.orbit-icon');
     
     // Only init listeners and random timings once to prevent jumpiness on resize
@@ -66,20 +59,31 @@ export function initOrbitAnimations() {
         if (icon) icon.style.animationPlayState = 'running';
       });
     }
-
-    // Dynamic radius is updated on resize
-    const radius = (baseRadius + (index * radiusStep)).toFixed(2); 
-    wrapper.style.setProperty('--radius', `${radius}rem`);
   });
+
+  const updateRadii = () => {
+    const isMobile = window.innerWidth < 768;
+    const isSmallMobile = window.innerWidth < 480;
+
+    // Base radius and step adjusted for mobile to prevent overflow
+    const baseRadius = isSmallMobile ? 3.5 : (isMobile ? 4.5 : 7.5);
+    const radiusStep = isSmallMobile ? 1.0 : (isMobile ? 1.5 : 2.5);
+
+    wrappers.forEach((wrapper, index) => {
+      // Dynamic radius is updated on resize
+      const radius = (baseRadius + (index * radiusStep)).toFixed(2); 
+      wrapper.style.setProperty('--radius', `${radius}rem`);
+    });
+  };
+
+  updateRadii();
 
   if (!isResizeListenerAdded) {
     isResizeListenerAdded = true;
     let resizeTimer;
     window.addEventListener('resize', () => {
       clearTimeout(resizeTimer);
-      resizeTimer = setTimeout(() => {
-        initOrbitAnimations();
-      }, 250);
+      resizeTimer = setTimeout(updateRadii, 250);
     });
   }
 }

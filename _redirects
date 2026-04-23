@@ -1,0 +1,10 @@
+# Cloudflare Pages Redirects
+# This file handles custom redirects and rewrites
+
+# Vanity shortlinks
+/github https://github.com/Pramesh-Bhurtel 301
+/linkedin https://www.linkedin.com/in/prameshbhurtel/ 301
+/cv /assets/Pramesh-Bhurtel-Resume.pdf 301
+
+# Fallback 404 Page
+/* /404.html 404

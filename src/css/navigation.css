@@ -50,9 +50,6 @@
   transform: scale(1.05);
 }
 
-.logo-accent {
-  color: var(--accent);
-}
 
 .nav-menu {
   /* Mobile First - Liquid Glass */
@@ -78,7 +75,7 @@
   border-bottom: none;
   display: flex;
   list-style: none;
-  z-index: -1;
+  z-index: 999;
 }
 
 .nav-menu.active {

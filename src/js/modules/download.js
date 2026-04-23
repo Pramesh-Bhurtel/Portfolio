@@ -15,13 +15,8 @@ export function initDownloadCV() {
     overlay.setAttribute('aria-hidden', 'false');
 
     setTimeout(() => {
-      try {
-        link.click();
-        showSuccess('CV downloaded successfully!');
-      } catch (err) {
-        window.open(link.href, '_blank');
-        showSuccess('CV opened in new tab!');
-      }
+      link.click();
+      showSuccess('CV downloaded successfully!');
     }, 700);
 
     setTimeout(() => {

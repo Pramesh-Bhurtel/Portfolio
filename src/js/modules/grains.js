@@ -1,6 +1,7 @@
-import { $ } from './dom.js';
+import { $, debounce } from './dom.js';
 
 let isGrainsInitialized = false;
+let animationFrameId = null;
 
 export function initGrains() {
   if (isGrainsInitialized) return;
@@ -9,9 +10,10 @@ export function initGrains() {
   const canvas = $('#grain-canvas');
   if (!canvas) return;
 
-  const ctx = canvas.getContext('2d');
+  const ctx = canvas.getContext('2d', { alpha: true });
   let particles = [];
   let mouse = { x: -1000, y: -1000 };
+  let isVisible = true;
   
   const accentColor = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim() || '#e11d48';
 
@@ -20,6 +22,8 @@ export function initGrains() {
     canvas.height = window.innerHeight;
     initParticles();
   }
+
+  const debouncedResize = debounce(resize, 250);
 
   class Particle {
     constructor() {
@@ -49,16 +53,9 @@ export function initGrains() {
       ctx.fillStyle = this.color;
       ctx.globalAlpha = this.opacity;
       
-      // High-Fidelity Glow
-      ctx.shadowBlur = this.size * 5;
-      ctx.shadowColor = this.color;
-      
       ctx.beginPath();
       ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
       ctx.fill();
-      
-      // Reset shadow for performance
-      ctx.shadowBlur = 0;
     }
 
     update() {
@@ -122,20 +119,44 @@ export function initGrains() {
   }
 
   function animate() {
+    if (!isVisible) return;
+    
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     for (let i = 0; i < particles.length; i++) {
-      particles[i].draw();
       particles[i].update();
+      particles[i].draw();
     }
-    requestAnimationFrame(animate);
+    animationFrameId = requestAnimationFrame(animate);
   }
 
-  window.addEventListener('resize', resize);
-  window.addEventListener('mousemove', (e) => {
+  const handleMouseMove = (e) => {
     mouse.x = e.clientX;
     mouse.y = e.clientY;
-  });
+  };
+
+  const handleVisibilityChange = () => {
+    isVisible = !document.hidden;
+    if (isVisible) {
+      animate();
+    } else if (animationFrameId) {
+      cancelAnimationFrame(animationFrameId);
+    }
+  };
+
+  window.addEventListener('resize', debouncedResize);
+  window.addEventListener('mousemove', handleMouseMove);
+  document.addEventListener('visibilitychange', handleVisibilityChange);
 
   resize();
   animate();
+  
+  // Return cleanup function just in case
+  return () => {
+    window.removeEventListener('resize', debouncedResize);
+    window.removeEventListener('mousemove', handleMouseMove);
+    document.removeEventListener('visibilitychange', handleVisibilityChange);
+    if (animationFrameId) {
+      cancelAnimationFrame(animationFrameId);
+    }
+  };
 }

@@ -10,7 +10,7 @@ A modern, responsive personal portfolio website designed to showcase my skills, 
 
 *   **Responsive Design**: Fully responsive layout that looks great on all devices (mobile, tablet, and desktop).
 *   **Modern Aesthetics**: Incorporates glassmorphism, smooth scrolling, and dynamic magnetic interactions heavily optimized with CSS variables.
-*   **Performance & Stability**: Robust vanilla JS modules free of memory leaks and UI thrashing, paired with aggressive server caching headers (`.htaccess`, `vercel.json`, `netlify.toml`).
+*   **Performance & Stability**: Robust vanilla JS modules free of memory leaks and UI thrashing, paired with aggressive server caching headers using Cloudflare Pages (`_headers`).
 *   **SEO Optimized**: Fully equipped with Progressive Web App integration (`manifest.json`), structured data, Open Graph tags, Twitter Card metadata, and a robust sitemap to ensure high visibility across search engines and social media.
 *   **Interactive UI**: Includes an interactive navigation bar, typing effects, and liquid web animations.
 
@@ -38,6 +38,17 @@ Alternatively, you can use any local web server to serve the files:
 # Example using Python 3
 python -m http.server 8000
 ```
+
+## ☁️ Deployment (Cloudflare Pages)
+
+This project is optimized for deployment on **Cloudflare Pages**.
+1. Connect your GitHub repository to Cloudflare Pages.
+2. Ensure you have no build command (it's a static site).
+3. Set the following **Environment Variables** in the Cloudflare Dashboard for the contact form to work:
+   - `EMAILJS_SERVICE_ID`
+   - `EMAILJS_TEMPLATE_ID`
+   - `EMAILJS_PUBLIC_KEY`
+4. The `functions/api/contact.js` will automatically handle server-side email dispatching, keeping your API keys secure.
 
 ## 📬 Contact Let's Connect!
 

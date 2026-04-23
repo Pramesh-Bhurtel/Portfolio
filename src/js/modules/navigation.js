@@ -1,4 +1,4 @@
-import { $, $$, on, scrollTo, throttle } from './dom.js';
+import { $, $$, on, smoothScrollTo, throttle } from './dom.js';
 
 export function initNavigation() {
   const navbar = $('#navbar');
@@ -27,7 +27,7 @@ export function initNavigation() {
       document.body.style.overflow = '';
       
       const href = link.getAttribute('href');
-      scrollTo(href, 80);
+      smoothScrollTo(href, 80);
     });
   });
 

@@ -5,12 +5,15 @@ let currentPhraseIndex = 0;
 let currentCharIndex = 0;
 let isDeleting = false;
 let typeInterval = null;
+let isVisible = true;
 
 export function initTypingEffect() {
   const typingText = $('#typing-text');
   if (!typingText) return;
 
   function typeEffect() {
+    if (!isVisible) return; // Pause if not visible
+    
     const currentPhrase = Config.phrases[currentPhraseIndex];
     let currentSpeed = Config.typingSpeed;
 
@@ -34,6 +37,18 @@ export function initTypingEffect() {
 
     typeInterval = setTimeout(typeEffect, currentSpeed);
   }
+
+  const handleVisibilityChange = () => {
+    isVisible = !document.hidden;
+    if (isVisible) {
+      // Resume typing
+      typeInterval = setTimeout(typeEffect, Config.typingSpeed);
+    } else if (typeInterval) {
+      clearTimeout(typeInterval);
+    }
+  };
+
+  document.addEventListener('visibilitychange', handleVisibilityChange);
 
   typeEffect();
 }

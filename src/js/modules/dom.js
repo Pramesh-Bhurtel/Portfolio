@@ -12,7 +12,7 @@ export function on(element, event, handler, options = {}) {
 }
 
 
-export function scrollTo(element, offset = 0) {
+export function smoothScrollTo(element, offset = 0) {
   const target = typeof element === 'string' 
     ? document.querySelector(element) 
     : element;
