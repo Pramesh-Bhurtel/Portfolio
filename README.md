@@ -8,22 +8,30 @@ A modern, responsive personal portfolio website designed to showcase my skills, 
 
 ## 🚀 Key Features
 
-*   **Responsive Design**: Fully responsive layout that looks great on all devices (mobile, tablet, and desktop).
-*   **Modern Aesthetics**: Incorporates glassmorphism, smooth scrolling, and dynamic magnetic interactions heavily optimized with CSS variables.
-*   **Performance & Stability**: Robust vanilla JS modules free of memory leaks and UI thrashing, paired with aggressive server caching headers (`.htaccess`, `vercel.json`, `netlify.toml`).
-*   **SEO Optimized**: Fully equipped with Progressive Web App integration (`manifest.json`), structured data, Open Graph tags, Twitter Card metadata, and a robust sitemap to ensure high visibility across search engines and social media.
-*   **Interactive UI**: Includes an interactive navigation bar, typing effects, and liquid web animations.
+*   **Responsive Design**: Fully responsive layout optimized for mobile, tablet, and desktop devices.
+*   **Modern Aesthetics**: Clean design utilizing CSS variables, grain overlays, orbit animations, and smooth scroll reveals.
+*   **Performance & Architecture**: Highly modular, vanilla JavaScript architecture (`src/js/modules`) prioritizing fast loading, no UI thrashing, and zero dependencies. 
+*   **SEO & PWA Optimized**: Comprehensive metadata (Open Graph, Twitter Cards), JSON-LD structured data, and PWA capabilities (`manifest.json`).
+*   **Cloudflare Integration**: Specifically configured for Cloudflare Pages with customized routing (`_redirects`), security headers (`_headers`), and `wrangler.jsonc` support.
+
+## 💼 Featured Projects
+
+*   **Gorkhas Spirit**: A dedicated social media hub for Kathmandu Gorkhas uniting fans through engaging content.
+*   **Portfolio Website**: A modern, responsive portfolio website highlighting projects and skills.
+*   **Nepal Premier League S2**: Volunteer management and ticketing workflow representation.
+*   **ViperHarmonics**: High-fidelity digital harmonium using the Web Audio API with MIDI support.
+*   **Fire Ninja**: A blazing arcade slash game built with HTML5 Canvas.
 
 ## 💻 Tech Stack
 
-*   **HTML5**: Semantic and accessible structure.
-*   **CSS3**: Custom properties, Flexbox/Grid layouts, and keyframe animations.
-*   **JavaScript (ES6+)**: Vanilla interactive logic and event handling.
-*   **JSON-LD**: Rich structured data for search engine comprehension.
+*   **Frontend Core**: HTML5, CSS3 (Custom Properties, Flexbox/Grid)
+*   **Logic & Interactions**: Vanilla JavaScript (ES6+ Modules)
+*   **Analytics & Metadata**: Google Analytics, JSON-LD Structured Data
+*   **Deployment & Hosting**: Cloudflare Pages
 
 ## 🛠️ Local Development
 
-To run this project locally, simply clone the repository and open `index.html` in your browser. 
+This project uses native ES modules, so it must be served via a local web server to function correctly (opening `index.html` directly via the `file://` protocol will cause CORS issues with modules).
 
 ```bash
 # Clone the repository
@@ -31,28 +39,26 @@ git clone https://github.com/Pramesh-Bhurtel/Portfolio.git
 
 # Navigate into the directory
 cd Portfolio
-```
 
-Alternatively, you can use any local web server to serve the files:
-```bash
-# Example using Python 3
+# Start a local web server (e.g., using Python)
 python -m http.server 8000
+# Or using Node.js (npx)
+npx serve .
 ```
 
 ## ☁️ Deployment (Cloudflare Pages)
 
 This project is optimized for deployment on **Cloudflare Pages**.
+
 1. Connect your GitHub repository to Cloudflare Pages.
-2. Ensure you have no build command (it's a static site).
-3. Set the following **Environment Variables** in the Cloudflare Dashboard for the contact form to work:
-   - `EMAILJS_SERVICE_ID`
-   - `EMAILJS_TEMPLATE_ID`
-   - `EMAILJS_PUBLIC_KEY`
-4. The `functions/api/contact.js` will automatically handle server-side email dispatching, keeping your API keys secure.
+2. Select **None** as the framework preset (it is a static site).
+3. Ensure the Build command is empty and the Output directory is set to your repository root (`/` or `.`).
+4. To enable the contact form, configure your EmailJS credentials in `src/js/modules/env.js` (or via your client-side environment setup).
+5. The `_headers` and `_redirects` files automatically handle security policies and URL routing.
 
-## 📬 Contact Let's Connect!
+## 📬 Contact
 
-I am always open to discussing exciting projects and new opportunities.
+I am always open to discussing exciting projects and new opportunities!
 
 *   **Email**: contact@prameshbhurtel.com.np
 *   **LinkedIn**: [prameshbhurtel](https://www.linkedin.com/in/prameshbhurtel/)
