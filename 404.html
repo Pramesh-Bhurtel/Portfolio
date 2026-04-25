@@ -14,79 +14,13 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap">
-    <link rel="stylesheet" href="/src/css/reset.css">
     <link rel="stylesheet" href="/src/css/tokens.css">
+    <link rel="stylesheet" href="/src/css/layout.css">
+    <link rel="stylesheet" href="/src/css/animations.css">
+    <link rel="stylesheet" href="/src/css/reset.css">
     <link rel="stylesheet" href="/src/css/components.css">
 
-    <style>
-        .error-container {
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            padding: var(--space-xl);
-            /* Remove solid background to let grains show through */
-            background: transparent;
-            animation: fadeIn 1s ease-out forwards;
-        }
-        
-        .error-404 {
-            font-size: clamp(6rem, 15vw, 10rem);
-            font-weight: 800;
-            color: transparent;
-            -webkit-text-stroke: 2px var(--accent);
-            text-shadow: 0 0 20px var(--accent-glow);
-            margin-bottom: var(--space-md);
-            letter-spacing: 5px;
-            font-family: var(--font-mono);
-            animation: pulseError 2.5s ease-in-out infinite alternate, float 6s ease-in-out infinite alternate;
-        }
-
-        .error-title {
-            font-size: clamp(1.5rem, 5vw, 2.5rem);
-            color: var(--text);
-            margin-bottom: var(--space-lg);
-            opacity: 0;
-            animation: slideUp 0.8s ease-out 0.3s forwards;
-        }
-
-        .error-message {
-            color: var(--muted);
-            font-size: 1.1rem;
-            max-width: 600px;
-            margin-bottom: var(--space-2xl);
-            line-height: 1.6;
-            opacity: 0;
-            animation: slideUp 0.8s ease-out 0.6s forwards;
-        }
-
-        .error-btn-wrapper {
-            opacity: 0;
-            animation: slideUp 0.8s ease-out 0.9s forwards;
-        }
-
-        @keyframes pulseError {
-            0% { text-shadow: 0 0 20px var(--accent-glow); }
-            100% { text-shadow: 0 0 40px var(--accent), 0 0 80px var(--accent-2); }
-        }
-
-        @keyframes float {
-            0% { transform: translateY(0px); }
-            100% { transform: translateY(-20px); }
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-    </style>
+    <link rel="stylesheet" href="/src/css/404.css">
 </head>
 <body>
     <canvas id="grain-canvas" class="grain-canvas" aria-hidden="true"></canvas>
@@ -103,9 +37,17 @@
     </main>
 
     <script type="module">
-        import { initGrains } from './src/js/modules/grains.js';
+        import { initGrains } from '/src/js/modules/grains.js';
+        import { initCursor } from '/src/js/modules/cursor.js';
+        import { initQoL } from '/src/js/modules/qol.js';
+        import { prefersReducedMotion } from '/src/js/modules/dom.js';
         
         document.addEventListener('DOMContentLoaded', () => {
+            if (prefersReducedMotion()) {
+                document.body.classList.add('reduced-motion');
+            }
+            initCursor();
+            initQoL();
             initGrains();
         });
     </script>

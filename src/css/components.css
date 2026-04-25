@@ -11,6 +11,7 @@
   backdrop-filter: var(--glass-blur);
   -webkit-backdrop-filter: var(--glass-blur);
   transform: translate(var(--mag-x, 0px), var(--mag-y, 0px));
+  animation: breathe 4s ease-in-out infinite;
 }
 
 .skill-tag::before {
@@ -30,6 +31,7 @@
   color: white;
   transform: translate(var(--mag-x, 0px), calc(-3px + var(--mag-y, 0px)));
   box-shadow: 0 5px 15px var(--accent-glow);
+  animation-play-state: paused;
 }
 
 .skill-tag:hover::before {
@@ -234,9 +236,7 @@
   margin-left: var(--space-sm);
 }
 
-@keyframes spin {
-  to { transform: rotate(360deg); }
-}
+
 
 .download-overlay {
   position: fixed;
@@ -312,10 +312,7 @@
   border-color: var(--accent);
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
+
 
 .toast-container {
   position: fixed;
@@ -353,26 +350,4 @@
 
 .toast.info {
   border-color: #3b82f6;
-}
-
-@keyframes toastIn {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes toastOut {
-  from {
-    opacity: 1;
-    transform: translateY(0);
-  }
-  to {
-    opacity: 0;
-    transform: translateY(-20px);
-  }
 }

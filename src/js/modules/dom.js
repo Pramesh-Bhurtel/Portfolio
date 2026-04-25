@@ -11,7 +11,21 @@ export function on(element, event, handler, options = {}) {
   element.addEventListener(event, handler, options);
 }
 
+export function off(element, event, handler, options = {}) {
+  if (!element) return;
+  element.removeEventListener(event, handler, options);
+}
 
+export function prefersReducedMotion() {
+  return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+}
+
+export function getEnvVar(key, fallback = '') {
+  if (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env[key]) {
+    return import.meta.env[key];
+  }
+  return fallback;
+}
 export function smoothScrollTo(element, offset = 0) {
   const target = typeof element === 'string' 
     ? document.querySelector(element) 
@@ -19,7 +33,7 @@ export function smoothScrollTo(element, offset = 0) {
   
   if (!target) return;
   
-  const position = target.getBoundingClientRect().top + window.pageYOffset - offset;
+  const position = target.getBoundingClientRect().top + window.scrollY - offset;
   window.scrollTo({ top: position, behavior: 'smooth' });
 }
 

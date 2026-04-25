@@ -1,8 +1,14 @@
-import { $, $$, on, smoothScrollTo } from './dom.js';
+import { $, $$, on, smoothScrollTo, prefersReducedMotion } from './dom.js';
 
 export function initScrollReveal() {
   const revealElements = $$('.section-title, .project-card, .about-text, .about-visual, .contact-info, .contact-form');
+  const reducedMotion = prefersReducedMotion();
   
+  if (reducedMotion) {
+    revealElements.forEach(el => el.classList.add('revealed'));
+    return;
+  }
+
   const revealObserver = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
@@ -23,9 +29,7 @@ export function initScrollReveal() {
 
 export function initScrollProgress() {
   const progressBar = $('#scroll-progress');
-  const scrollBtn = $('#scroll-top');
-  
-  if (!progressBar && !scrollBtn) return;
+  if (!progressBar) return;
   
   let ticking = false;
   on(window, 'scroll', () => {
@@ -33,18 +37,14 @@ export function initScrollProgress() {
       window.requestAnimationFrame(() => {
         const windowHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
         const scrolled = (window.scrollY / windowHeight) * 100;
+        progressBar.style.width = `${scrolled}%`;
         
-        if (progressBar) {
-          progressBar.style.width = `${scrolled}%`;
+        if (scrolled > 0 && !document.body.classList.contains('scrolling-active')) {
+          document.body.classList.add('scrolling-active');
+        } else if (scrolled === 0 && document.body.classList.contains('scrolling-active')) {
+          document.body.classList.remove('scrolling-active');
         }
         
-        if (scrollBtn) {
-          if (window.scrollY > 300) {
-            scrollBtn.classList.add('visible');
-          } else {
-            scrollBtn.classList.remove('visible');
-          }
-        }
         ticking = false;
       });
       ticking = true;
@@ -54,25 +54,31 @@ export function initScrollProgress() {
 
 export function initScrollAnimations() {
   const elements = $$('.slide-in-left, .slide-in-right, .slide-in-up');
+  const reducedMotion = prefersReducedMotion();
   
   if (elements.length === 0) return;
 
+  if (reducedMotion) {
+    elements.forEach(el => el.classList.add('visible'));
+    return;
+  }
+
   let delayCounter = 0;
-  let lastTime = 0;
+  let batchTime = 0;
 
   const observer = new IntersectionObserver((entries) => {
-    const now = Date.now();
-    
-    // Reset delay counter if current batch is significantly separated in time from the previous
-    if (now - lastTime > 100) {
-      delayCounter = 0;
+    // Reset delay counter for new batches
+    if (entries.length > 0) {
+      const entryTime = entries[0].time;
+      if (entryTime - batchTime > 100) {
+        delayCounter = 0;
+        batchTime = entryTime;
+      }
     }
-    lastTime = now;
 
     entries.forEach(entry => {
       if (entry.isIntersecting) {
         const el = entry.target;
-        // Apply staggered delay
         el.style.transitionDelay = `${delayCounter * 0.15}s`;
         el.classList.add('visible');
         delayCounter++;
@@ -92,6 +98,14 @@ export function initScrollTop() {
   const logo = $('#site-logo');
 
   if (scrollBtn) {
+    on(window, 'scroll', () => {
+      if (window.scrollY > 300) {
+        scrollBtn.classList.add('visible');
+      } else {
+        scrollBtn.classList.remove('visible');
+      }
+    }, { passive: true });
+
     on(scrollBtn, 'click', () => {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     });

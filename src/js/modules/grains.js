@@ -1,4 +1,4 @@
-import { $, debounce } from './dom.js';
+import { $, debounce, prefersReducedMotion } from './dom.js';
 
 let isGrainsInitialized = false;
 let animationFrameId = null;
@@ -16,11 +16,15 @@ export function initGrains() {
   let isVisible = true;
   
   const accentColor = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim() || '#e11d48';
+  const reducedMotion = prefersReducedMotion();
 
   function resize() {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
     initParticles();
+    if (reducedMotion && isVisible) {
+      drawStatic();
+    }
   }
 
   const debouncedResize = debounce(resize, 250);
@@ -50,12 +54,14 @@ export function initGrains() {
     }
 
     draw() {
+      ctx.save();
       ctx.fillStyle = this.color;
       ctx.globalAlpha = this.opacity;
       
       ctx.beginPath();
       ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
       ctx.fill();
+      ctx.restore();
     }
 
     update() {
@@ -63,6 +69,8 @@ export function initGrains() {
       let dx = mouse.x - this.x;
       let dy = mouse.y - this.y;
       let distance = Math.sqrt(dx * dx + dy * dy);
+      
+      if (distance < 0.1) distance = 0.1; // Prevent division by zero
       
       const maxDistance = 250;
       const minDistance = 50; // Non-attaching buffer
@@ -112,9 +120,18 @@ export function initGrains() {
 
   function initParticles() {
     particles = [];
-    const count = Math.min(150, (canvas.width * canvas.height) / 10000);
+    const isMobile = window.innerWidth < 768;
+    const maxParticles = isMobile ? 50 : 150;
+    const count = Math.min(maxParticles, (canvas.width * canvas.height) / 10000);
     for (let i = 0; i < count; i++) {
       particles.push(new Particle());
+    }
+  }
+
+  function drawStatic() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    for (let i = 0; i < particles.length; i++) {
+      particles[i].draw();
     }
   }
 
@@ -137,18 +154,27 @@ export function initGrains() {
   const handleVisibilityChange = () => {
     isVisible = !document.hidden;
     if (isVisible) {
-      animate();
+      if (animationFrameId) cancelAnimationFrame(animationFrameId);
+      if (!reducedMotion) {
+        animate();
+      } else {
+        drawStatic();
+      }
     } else if (animationFrameId) {
       cancelAnimationFrame(animationFrameId);
     }
   };
 
   window.addEventListener('resize', debouncedResize);
-  window.addEventListener('mousemove', handleMouseMove);
+  if (!reducedMotion) {
+    window.addEventListener('mousemove', handleMouseMove);
+  }
   document.addEventListener('visibilitychange', handleVisibilityChange);
 
   resize();
-  animate();
+  if (!reducedMotion) {
+    animate();
+  }
   
   // Return cleanup function just in case
   return () => {

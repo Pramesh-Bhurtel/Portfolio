@@ -1,30 +1,30 @@
 import { $, on } from './dom.js';
 import { showSuccess } from './toast.js';
 
-export function initDownloadCV() {
+export function initDownload() {
   const btn = $('#download-cv-btn');
   const link = $('#cv-download-link');
   const overlay = $('#download-overlay');
 
   if (!btn || !link || !overlay) return;
 
-  const startDownloadFlow = () => {
+  const startDownloadFlow = async () => {
+    if (btn.disabled) return;
+    
     btn.disabled = true;
     btn.setAttribute('aria-busy', 'true');
     overlay.classList.add('active');
     overlay.setAttribute('aria-hidden', 'false');
 
-    setTimeout(() => {
-      link.click();
-      showSuccess('CV downloaded successfully!');
-    }, 700);
-
-    setTimeout(() => {
-      overlay.classList.remove('active');
-      overlay.setAttribute('aria-hidden', 'true');
-      btn.disabled = false;
-      btn.removeAttribute('aria-busy');
-    }, 1600);
+    await new Promise(resolve => setTimeout(resolve, 700));
+    link.click();
+    showSuccess('CV downloaded successfully!');
+    
+    await new Promise(resolve => setTimeout(resolve, 900));
+    overlay.classList.remove('active');
+    overlay.setAttribute('aria-hidden', 'true');
+    btn.disabled = false;
+    btn.removeAttribute('aria-busy');
   };
 
   on(btn, 'click', (e) => {

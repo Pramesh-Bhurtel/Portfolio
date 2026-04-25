@@ -59,8 +59,10 @@
     <link rel="preload" as="image" href="assets/images/img-800.webp" imagesrcset="assets/images/img-400.webp 400w, assets/images/img-800.webp 800w" imagesizes="(max-width: 480px) 400px, 800px" fetchpriority="high">
     
     <!-- Critical CSS (Above the fold) -->
-    <link rel="stylesheet" href="src/css/reset.css">
     <link rel="stylesheet" href="src/css/tokens.css">
+    <link rel="stylesheet" href="src/css/layout.css">
+    <link rel="stylesheet" href="src/css/animations.css">
+    <link rel="stylesheet" href="src/css/reset.css">
     <link rel="stylesheet" href="src/css/navigation.css">
     <link rel="stylesheet" href="src/css/hero.css">
 
@@ -70,6 +72,15 @@
     <noscript>
         <link rel="stylesheet" href="src/css/sections.css">
         <link rel="stylesheet" href="src/css/components.css">
+        <style>
+          .reveal-init, .slide-in-left, .slide-in-right, .slide-in-up {
+            opacity: 1 !important;
+            transform: none !important;
+          }
+          .custom-cursor, .custom-cursor-follower {
+            display: none !important;
+          }
+        </style>
     </noscript>
 
     <!-- JSON-LD Structured Data -->
@@ -103,6 +114,16 @@
         }
       ]
     }
+    </script>
+
+    <!-- Client-side Fallback Routing for unhandled paths -->
+    <script>
+      (function() {
+        const path = window.location.pathname;
+        if (path !== '/' && path !== '/index.html' && !path.startsWith('/assets/') && !path.startsWith('/src/')) {
+          window.location.replace('/404.html');
+        }
+      })();
     </script>
 
     <!-- Main JavaScript (Deferred by default with type="module") -->
@@ -177,7 +198,7 @@
                             <div class="sun-core">
                                 <picture>
                                     <source srcset="assets/images/img-400.webp 400w, assets/images/img-800.webp 800w" sizes="(max-width: 480px) 400px, 800px" type="image/webp">
-                                    <img src="assets/images/img.jpg" alt="Pramesh Bhurtel" width="400" height="400" fetchpriority="high" decoding="sync">
+                                    <img src="assets/images/img-800.webp" alt="Pramesh Bhurtel" width="400" height="400" fetchpriority="high" decoding="sync">
                                 </picture>
                             </div>
                             <div class="orbit-wrapper random-orbit">
@@ -256,7 +277,7 @@
                         <div class="project-image">
                             <picture>
                                 <source srcset="assets/images/gorkhas.spirit-400.webp 400w, assets/images/gorkhas.spirit.webp 800w" sizes="(max-width: 480px) 400px, (max-width: 1024px) 600px, 800px" type="image/webp">
-                                <img src="assets/images/gorkhas.spirit.jpg" alt="Gorkhas Spirit" width="600" height="400" loading="lazy" decoding="async">
+                                <img src="assets/images/gorkhas.spirit.webp" alt="Gorkhas Spirit" width="600" height="400" loading="lazy" decoding="async">
                             </picture>
                         </div>
                         <div class="project-content">
@@ -281,7 +302,7 @@
                         <div class="project-image">
                             <picture>
                                 <source srcset="assets/images/pf-400.webp 400w, assets/images/pf.webp 800w" sizes="(max-width: 480px) 400px, (max-width: 1024px) 600px, 800px" type="image/webp">
-                                <img src="assets/images/pf.png" alt="Portfolio Website" width="600" height="400" loading="lazy" decoding="async">
+                                <img src="assets/images/pf.webp" alt="Portfolio Website" width="600" height="400" loading="lazy" decoding="async">
                             </picture>
                         </div>
                         <div class="project-content">
@@ -302,7 +323,7 @@
                         <div class="project-image">
                             <picture>
                                 <source srcset="assets/images/box.office-400.webp 400w, assets/images/box.office.webp 800w" sizes="(max-width: 480px) 400px, (max-width: 1024px) 600px, 800px" type="image/webp">
-                                <img src="assets/images/box.office.jpg" alt="Nepal Premier League S2" width="600" height="400" loading="lazy" decoding="async">
+                                <img src="assets/images/box.office.webp" alt="Nepal Premier League S2" width="600" height="400" loading="lazy" decoding="async">
                             </picture>
                         </div>
                         <div class="project-content">
@@ -319,7 +340,7 @@
                         <div class="project-image">
                             <picture>
                                 <source srcset="assets/images/ViperHarmonics-400.webp 400w, assets/images/ViperHarmonics.webp 512w" sizes="(max-width: 480px) 400px, 512px" type="image/webp">
-                                <img src="assets/images/ViperHarmonics.png" alt="ViperHarmonics" width="600" height="400" loading="lazy" decoding="async">
+                                <img src="assets/images/ViperHarmonics.webp" alt="ViperHarmonics" width="600" height="400" loading="lazy" decoding="async">
                             </picture>
                         </div>
                         <div class="project-content">
@@ -342,7 +363,7 @@
                         <div class="project-image">
                             <picture>
                                 <source srcset="assets/images/fire_ninja-400.webp 400w, assets/images/fire_ninja.webp 800w" sizes="(max-width: 480px) 400px, (max-width: 1024px) 600px, 800px" type="image/webp">
-                                <img src="assets/images/fire_ninja.png" alt="Fire Ninja Game" width="600" height="400" loading="lazy" decoding="async">
+                                <img src="assets/images/fire_ninja.webp" alt="Fire Ninja Game" width="600" height="400" loading="lazy" decoding="async">
                             </picture>
                         </div>
                         <div class="project-content">

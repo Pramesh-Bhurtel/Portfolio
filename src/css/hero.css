@@ -52,9 +52,13 @@
   animation: blink 1s infinite;
 }
 
-@keyframes blink {
-  0%, 50% { opacity: 1; }
-  51%, 100% { opacity: 0; }
+.hero-visual {
+  display: flex;
+  justify-content: center;
+  animation: slideInRight 1s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  width: 100%;
+  transform-style: preserve-3d;
+  perspective: 1000px;
 }
 
 .hero-quote {
@@ -76,13 +80,6 @@
   display: flex;
   justify-content: center;
   gap: var(--space-md);
-}
-
-.hero-visual {
-  display: flex;
-  justify-content: center;
-  animation: slideInRight 1s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-  width: 100%;
 }
 
 .avatar-container {
@@ -110,8 +107,9 @@
     0 0 5rem rgba(255, 69, 0, 0.5),
     0 0 7.5rem rgba(255, 69, 0, 0.3),
     inset 0 0 1.875rem rgba(255, 69, 0, 0.4);
+  --sun-scale: 1;
   animation: sunGlow 3s ease-in-out infinite alternate, floatHero 6s ease-in-out infinite;
-  transition: transform var(--transition-smooth);
+  transition: transform var(--transition-smooth), --sun-scale var(--transition-smooth);
   overflow: hidden;
   z-index: 10;
 }
@@ -124,7 +122,7 @@
 }
 
 .sun-core:hover {
-  transform: translate(-50%, -50%) scale(1.1);
+  --sun-scale: 1.1;
 }
 
 .orbit-icon {
@@ -157,28 +155,6 @@
   background: rgba(255, 56, 56, 0.4);
   transform: scale(1.2) !important;
   box-shadow: var(--shadow-accent);
-}
-
-@keyframes floatHero {
-  0%, 100% { transform: translate(-50%, -50%) translateY(0); }
-  50% { transform: translate(-50%, -50%) translateY(-15px); }
-}
-
-@keyframes sunGlow {
-  0% {
-    box-shadow:
-      0 0 2.5rem rgba(255, 69, 0, 0.8),
-      0 0 5rem rgba(255, 69, 0, 0.5),
-      0 0 7.5rem rgba(255, 69, 0, 0.3),
-      inset 0 0 1.875rem rgba(255, 69, 0, 0.4);
-  }
-  100% {
-    box-shadow:
-      0 0 3.125rem rgba(255, 69, 0, 1),
-      0 0 6.25rem rgba(255, 69, 0, 0.7),
-      0 0 9.375rem rgba(255, 69, 0, 0.4),
-      inset 0 0 2.5rem rgba(255, 69, 0, 0.6);
-  }
 }
 
 /* Tablet Transition */

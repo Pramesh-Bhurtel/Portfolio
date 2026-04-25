@@ -1,4 +1,4 @@
-import { $ } from './dom.js';
+import { $, prefersReducedMotion } from './dom.js';
 import { Config } from './config.js';
 
 let currentPhraseIndex = 0;
@@ -6,10 +6,18 @@ let currentCharIndex = 0;
 let isDeleting = false;
 let typeInterval = null;
 let isVisible = true;
+let isTypingActive = false;
 
 export function initTypingEffect() {
   const typingText = $('#typing-text');
   if (!typingText) return;
+
+  if (prefersReducedMotion()) {
+    typingText.textContent = Config.phrases[0];
+    const cursor = $('.cursor');
+    if (cursor) cursor.style.display = 'none';
+    return;
+  }
 
   function typeEffect() {
     if (!isVisible) return; // Pause if not visible
@@ -35,16 +43,17 @@ export function initTypingEffect() {
       currentSpeed = Config.pauseBeforeNext;
     }
 
+    if (typeInterval) clearTimeout(typeInterval);
     typeInterval = setTimeout(typeEffect, currentSpeed);
   }
 
   const handleVisibilityChange = () => {
     isVisible = !document.hidden;
     if (isVisible) {
-      // Resume typing
+      if (typeInterval) clearTimeout(typeInterval);
       typeInterval = setTimeout(typeEffect, Config.typingSpeed);
-    } else if (typeInterval) {
-      clearTimeout(typeInterval);
+    } else {
+      if (typeInterval) clearTimeout(typeInterval);
     }
   };
 

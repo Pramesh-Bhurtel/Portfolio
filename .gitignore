@@ -15,10 +15,22 @@ npm-debug.log*
 !.env.example
 src/js/modules/env.js
 
-# Editor / IDE
-.vscode/
-.idea/
-.DS_Store
-
 # System Files
 Thumbs.db
+.DS_Store
+Desktop.ini
+
+# Large Raw Assets
+assets/images/raw/
+
+# IDE / Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Local build artifacts
+dist/
+.wrangler/
+.vite/
+node_modules/

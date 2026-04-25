@@ -31,7 +31,7 @@ A modern, responsive personal portfolio website designed to showcase my skills, 
 
 ## 🛠️ Local Development
 
-This project uses native ES modules, so it must be served via a local web server to function correctly (opening `index.html` directly via the `file://` protocol will cause CORS issues with modules).
+This project uses **Vite** for local development and bundling.
 
 ```bash
 # Clone the repository
@@ -40,10 +40,14 @@ git clone https://github.com/Pramesh-Bhurtel/Portfolio.git
 # Navigate into the directory
 cd Portfolio
 
-# Start a local web server (e.g., using Python)
-python -m http.server 8000
-# Or using Node.js (npx)
-npx serve .
+# Install dependencies
+npm install
+
+# Start local development server
+npm run dev
+
+# Build for production
+npm run build
 ```
 
 ## ☁️ Deployment (Cloudflare Pages)
@@ -51,10 +55,12 @@ npx serve .
 This project is optimized for deployment on **Cloudflare Pages**.
 
 1. Connect your GitHub repository to Cloudflare Pages.
-2. Select **None** as the framework preset (it is a static site).
-3. Ensure the Build command is empty and the Output directory is set to your repository root (`/` or `.`).
-4. To enable the contact form, configure your EmailJS credentials in `src/js/modules/env.js` (or via your client-side environment setup).
-5. The `_headers` and `_redirects` files automatically handle security policies and URL routing.
+2. Configure the build settings:
+   - **Framework preset**: None / Other
+   - **Build command**: `npm run build`
+   - **Output directory**: `dist`
+3. The contact form is pre-configured with EmailJS credentials in `src/js/modules/config.js`.
+4. The `_headers` and `_redirects` files handle security policies and URL routing automatically.
 
 ## 📬 Contact
 
