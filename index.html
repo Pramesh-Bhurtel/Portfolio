@@ -1,14 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-DXRBV7TEVB"></script>
+    <!-- Google tag (gtag.js) - Deferred for Performance -->
     <script>
+      // Initialize dataLayer immediately so other scripts can push events
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
-
       gtag('config', 'G-DXRBV7TEVB');
+
+      // Defer loading the actual gtag script to improve performance
+      const loadGTag = () => {
+        if (window.gtagLoaded) return;
+        window.gtagLoaded = true;
+        const script = document.createElement('script');
+        script.src = 'https://www.googletagmanager.com/gtag/js?id=G-DXRBV7TEVB';
+        script.async = true;
+        document.head.appendChild(script);
+      };
+
+      // Load on user interaction
+      ['scroll', 'mousemove', 'touchstart', 'keydown'].forEach(event => {
+        window.addEventListener(event, loadGTag, { once: true, passive: true });
+      });
+      
+      // Fallback: load after 5 seconds if no interaction
+      setTimeout(loadGTag, 5000);
     </script>
     
     <meta charset="UTF-8">
