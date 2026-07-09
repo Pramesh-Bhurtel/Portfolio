@@ -77,7 +77,7 @@ function loadEmailJS() {
 
   emailjsLoadPromise = new Promise((resolve, reject) => {
     const script = document.createElement('script');
-    script.src = 'https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js';
+    script.src = 'https://cdn.jsdelivr.net/npm/@emailjs/browser@4.4.1/dist/email.min.js';
     script.onload = () => {
       if (typeof emailjs.init === 'function') {
         emailjs.init(Config.emailjs.publicKey);

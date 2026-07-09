@@ -31,12 +31,18 @@ export function initScrollProgress() {
   const progressBar = $('#scroll-progress');
   if (!progressBar) return;
   
+  let windowHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+  
+  // Recalculate window height on resize
+  on(window, 'resize', () => {
+    windowHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+  });
+  
   let ticking = false;
   on(window, 'scroll', () => {
     if (!ticking) {
       window.requestAnimationFrame(() => {
-        const windowHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-        const scrolled = (window.scrollY / windowHeight) * 100;
+        const scrolled = windowHeight > 0 ? (window.scrollY / windowHeight) * 100 : 0;
         progressBar.style.width = `${scrolled}%`;
         
         if (scrolled > 0 && !document.body.classList.contains('scrolling-active')) {

@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <!-- Google tag (gtag.js) - Deferred for Performance -->
     <script>
       // Initialize dataLayer immediately so other scripts can push events
@@ -28,8 +31,7 @@
       setTimeout(loadGTag, 5000);
     </script>
     
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Pramesh Bhurtel | Portfolio — CS Student & Creative Developer</title>
     <meta name="description" content="Passionate Computer Science student, tech enthusiast, and creative developer. Skilled in Web Development, Python, and digital media creation.">
     <meta name="keywords" content="Pramesh Bhurtel, Portfolio, Web Developer, Computer Science, Nepal, Kathmandu, Student, Python, JavaScript, HTML, CSS, React">
@@ -70,7 +72,7 @@
     
     <!-- Preload Critical Fonts -->
     <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" media="print" onload="this.media='all'">
 
     <!-- Preload Critical Assets -->
     <link rel="preload" as="image" href="assets/images/img-800.webp" fetchpriority="high">
@@ -87,6 +89,7 @@
     <link rel="stylesheet" href="src/css/sections.css" media="print" onload="this.media='all'">
     <link rel="stylesheet" href="src/css/components.css" media="print" onload="this.media='all'">
     <noscript>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap">
         <link rel="stylesheet" href="src/css/sections.css">
         <link rel="stylesheet" href="src/css/components.css">
         <style>
@@ -133,15 +136,7 @@
     }
     </script>
 
-    <!-- Client-side Fallback Routing for unhandled paths -->
-    <script>
-      (function() {
-        const path = window.location.pathname;
-        if (path !== '/' && path !== '/index.html' && !path.startsWith('/assets/') && !path.startsWith('/src/')) {
-          window.location.replace('/404.html');
-        }
-      })();
-    </script>
+
 
     <!-- Main JavaScript (Deferred by default with type="module") -->
     <script type="module" src="src/js/app.js"></script>
@@ -220,32 +215,32 @@
                             </div>
                             <div class="orbit-wrapper random-orbit">
                                 <button class="orbit-icon html" type="button" aria-label="HTML">
-                                    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg" alt="HTML">
+                                    <img src="assets/images/html5.svg" alt="HTML" width="24" height="24" loading="lazy" decoding="async">
                                 </button>
                             </div>
                             <div class="orbit-wrapper random-orbit">
                                 <button class="orbit-icon css" type="button" aria-label="CSS">
-                                    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg" alt="CSS">
+                                    <img src="assets/images/css3.svg" alt="CSS" width="24" height="24" loading="lazy" decoding="async">
                                 </button>
                             </div>
                             <div class="orbit-wrapper random-orbit">
                                 <button class="orbit-icon js" type="button" aria-label="JavaScript">
-                                    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" alt="JavaScript">
+                                    <img src="assets/images/javascript.svg" alt="JavaScript" width="24" height="24" loading="lazy" decoding="async">
                                 </button>
                             </div>
                             <div class="orbit-wrapper random-orbit">
                                 <button class="orbit-icon python" type="button" aria-label="Python">
-                                    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" alt="Python">
+                                    <img src="assets/images/python.svg" alt="Python" width="24" height="24" loading="lazy" decoding="async">
                                 </button>
                             </div>
                             <div class="orbit-wrapper random-orbit">
                                 <button class="orbit-icon capcut" type="button" aria-label="Capcut">
-                                    <img src="https://cdn.jsdelivr.net/gh/callback-io/allogo@main/public/logos/capcut/icon.svg" alt="Capcut">
+                                    <img src="assets/images/capcut.svg" alt="Capcut" width="24" height="24" loading="lazy" decoding="async">
                                 </button>
                             </div>
                             <div class="orbit-wrapper random-orbit">
                                 <button class="orbit-icon canva" type="button" aria-label="Canva">
-                                    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/canva/canva-original.svg" alt="Canva">
+                                    <img src="assets/images/canva.svg" alt="Canva" width="24" height="24" loading="lazy" decoding="async">
                                 </button>
                             </div>
                         </div>

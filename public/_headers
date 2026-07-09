@@ -1,0 +1,26 @@
+# Global security headers for all paths
+/*
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: DENY
+  Referrer-Policy: strict-origin-when-cross-origin
+  Content-Security-Policy: upgrade-insecure-requests;
+  Permissions-Policy: camera=(), microphone=(), geolocation=()
+  X-XSS-Protection: 1; mode=block
+  X-Frame-Options: SAMEORIGIN
+
+# Prevent caching of the main pages so new builds update immediately
+/
+  Cache-Control: public, no-cache, must-revalidate
+
+/index.html
+  Cache-Control: public, no-cache, must-revalidate
+
+/404.html
+  Cache-Control: public, no-cache, must-revalidate
+
+/manifest.json
+  Cache-Control: public, no-cache, must-revalidate
+
+# Permanently cache all Vite hashed static assets (images, js, fonts)
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable

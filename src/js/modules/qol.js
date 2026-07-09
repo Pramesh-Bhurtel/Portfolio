@@ -10,13 +10,22 @@ function initMagneticButtons() {
 
   magneticElements.forEach(el => {
     let ticking = false;
+    let rect = null;
+
+    // Cache the rect on mouseenter to avoid layout thrashing on mousemove
+    el.addEventListener('mouseenter', () => {
+      rect = el.getBoundingClientRect();
+    }, { passive: true });
 
     el.addEventListener('mousemove', (e) => {
+      if (!rect) {
+        rect = el.getBoundingClientRect();
+      }
       if (!ticking) {
         requestAnimationFrame(() => {
-          const { left, top, width, height } = el.getBoundingClientRect();
-          const x = e.clientX - left - width / 2;
-          const y = e.clientY - top - height / 2;
+          if (!rect) return;
+          const x = e.clientX - rect.left - rect.width / 2;
+          const y = e.clientY - rect.top - rect.height / 2;
 
           // Magnetic pull: 20% of movement
           el.style.setProperty('--mag-x', `${x * 0.2}px`);
@@ -28,6 +37,7 @@ function initMagneticButtons() {
     }, { passive: true });
 
     el.addEventListener('mouseleave', () => {
+      rect = null; // Reset cache
       requestAnimationFrame(() => {
         el.style.setProperty('--mag-x', `0px`);
         el.style.setProperty('--mag-y', `0px`);
