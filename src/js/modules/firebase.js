@@ -1,18 +1,21 @@
 /**
  * Firebase Module — Centralized App Initialization
- * 
- * Configured & Active for: portfoliocms-22b8a
- * Realtime Database Region: asia-southeast1
+ *
+ * Firebase credentials are loaded from environment variables at build time
+ * via Vite's import.meta.env (VITE_* prefix).
+ *
+ * Local development: set values in `.env` (gitignored)
+ * Production:        set in Cloudflare Pages → Settings → Environment Variables
  */
 export const FIREBASE_CONFIG = {
-  apiKey:            "AIzaSyCW2Nls3h1F1TP5RYCfI99-rX1a23FvTUM",
-  authDomain:        "portfoliocms-22b8a.firebaseapp.com",
-  databaseURL:       "https://portfoliocms-22b8a-default-rtdb.asia-southeast1.firebasedatabase.app",
-  projectId:         "portfoliocms-22b8a",
-  storageBucket:     "portfoliocms-22b8a.firebasestorage.app",
-  messagingSenderId: "390165062886",
-  appId:             "1:390165062886:web:32e88b072dc2a8942a0727",
-  measurementId:     "G-4RPR63DRCG"
+  apiKey:            import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain:        import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  databaseURL:       import.meta.env.VITE_FIREBASE_DATABASE_URL,
+  projectId:         import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket:     import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId:             import.meta.env.VITE_FIREBASE_APP_ID,
+  measurementId:     import.meta.env.VITE_FIREBASE_MEASUREMENT_ID,
 };
 
 // Singleton Firebase app + DB instance
@@ -28,9 +31,10 @@ export async function initFirebase() {
   if (_app && _db) return { app: _app, db: _db };
 
   // Validate config before attempting to connect
-  if (!FIREBASE_CONFIG.apiKey || FIREBASE_CONFIG.apiKey === 'YOUR_API_KEY') {
+  if (!FIREBASE_CONFIG.apiKey) {
     console.warn(
-      '[Firebase] Config not set. Open src/js/modules/firebase.js and replace the placeholder values.'
+      '[Firebase] Config not set. Add VITE_FIREBASE_* variables to your .env file ' +
+      'and to Cloudflare Pages → Settings → Environment Variables.'
     );
     return { app: null, db: null };
   }
