@@ -1,10 +1,10 @@
-import { $, $$, on, smoothScrollTo, prefersReducedMotion } from './dom.js';
+import { $, $$, on, prefersReducedMotion } from './dom.js';
 
 export function initScrollReveal() {
   const revealElements = $$('.section-title, .project-card, .about-text, .about-visual, .contact-info, .contact-form');
   const reducedMotion = prefersReducedMotion();
   
-  if (reducedMotion) {
+  if (reducedMotion || typeof IntersectionObserver === 'undefined') {
     revealElements.forEach(el => el.classList.add('revealed'));
     return;
   }
@@ -17,14 +17,21 @@ export function initScrollReveal() {
       }
     });
   }, {
-    threshold: 0.15,
-    rootMargin: '0px 0px -50px 0px'
+    threshold: 0.05,
+    rootMargin: '0px 0px -20px 0px'
   });
 
   revealElements.forEach(el => {
-    el.classList.add('reveal-init');
-    revealObserver.observe(el);
+    if (!el.classList.contains('revealed')) {
+      el.classList.add('reveal-init');
+      revealObserver.observe(el);
+    }
   });
+
+  // Safety fallback: reveal all elements after 2.5s if not already revealed
+  setTimeout(() => {
+    $$('.reveal-init:not(.revealed)').forEach(el => el.classList.add('revealed'));
+  }, 2500);
 }
 
 export function initScrollProgress() {
@@ -33,7 +40,6 @@ export function initScrollProgress() {
   
   let windowHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
   
-  // Recalculate window height on resize
   on(window, 'resize', () => {
     windowHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
   });
@@ -64,7 +70,7 @@ export function initScrollAnimations() {
   
   if (elements.length === 0) return;
 
-  if (reducedMotion) {
+  if (reducedMotion || typeof IntersectionObserver === 'undefined') {
     elements.forEach(el => el.classList.add('visible'));
     return;
   }
@@ -73,7 +79,6 @@ export function initScrollAnimations() {
   let batchTime = 0;
 
   const observer = new IntersectionObserver((entries) => {
-    // Reset delay counter for new batches
     if (entries.length > 0) {
       const entryTime = entries[0].time;
       if (entryTime - batchTime > 100) {
@@ -85,18 +90,24 @@ export function initScrollAnimations() {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
         const el = entry.target;
-        el.style.transitionDelay = `${delayCounter * 0.15}s`;
+        el.style.transitionDelay = `${delayCounter * 0.1}s`;
         el.classList.add('visible');
         delayCounter++;
         observer.unobserve(el);
       }
     });
   }, {
-    threshold: 0.1,
-    rootMargin: '0px 0px -50px 0px'
+    threshold: 0.05,
+    rootMargin: '0px 0px -20px 0px'
   });
 
   elements.forEach(element => observer.observe(element));
+
+  // Safety fallback for slide-ins
+  setTimeout(() => {
+    $$('.slide-in-left:not(.visible), .slide-in-right:not(.visible), .slide-in-up:not(.visible)')
+      .forEach(el => el.classList.add('visible'));
+  }, 2500);
 }
 
 export function initScrollTop() {

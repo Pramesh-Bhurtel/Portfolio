@@ -5,9 +5,12 @@ import { initNavigation } from './modules/navigation.js';
 import { initScrollReveal, initScrollProgress, initScrollAnimations, initScrollTop } from './modules/scroll.js';
 import { initContactForm } from './modules/contact.js';
 import { initDownload } from './modules/download.js';
+import { initAdminModal } from './modules/adminModal.js';
+import { initCmsSync } from './modules/cmsSync.js';
 import { initQoL } from './modules/qol.js';
 import { initCursor } from './modules/cursor.js';
 import { prefersReducedMotion } from './modules/dom.js';
+import { showError } from './modules/toast.js';
 
 document.addEventListener('DOMContentLoaded', () => {
   if (prefersReducedMotion()) {
@@ -22,6 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
 
+  safeInit('CMS Sync', initCmsSync);
   safeInit('QoL', initQoL);
   safeInit('Cursor', initCursor);
   safeInit('Navigation', initNavigation);
@@ -36,6 +40,12 @@ document.addEventListener('DOMContentLoaded', () => {
   
   safeInit('Contact', initContactForm);
   safeInit('Download', initDownload);
+  safeInit('Admin Modal', initAdminModal);
+
+  // Fire page-view metric to Firebase (lazy, non-blocking — never impacts LCP)
+  import('./modules/firebaseSync.js')
+    .then(m => m.incrementMetric('total_visits'))
+    .catch(() => {}); // silently ignore if Firebase not yet configured
 });
 
 // Global Image Fallback (Code-based fallback for broken images)
@@ -49,7 +59,5 @@ document.addEventListener('error', function(e) {
 // Fallback for unexpected global errors
 window.addEventListener('unhandledrejection', (event) => {
   console.error('Unhandled promise rejection:', event.reason);
-  import('./modules/toast.js').then(module => {
-    module.showError('Something went wrong. Please try again later.');
-  }).catch(console.error);
+  showError('Something went wrong. Please try again later.');
 });

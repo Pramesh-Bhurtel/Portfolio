@@ -19,6 +19,8 @@ export function initDownload() {
     await new Promise(resolve => setTimeout(resolve, 700));
     link.click();
     showSuccess('CV downloaded successfully!');
+    // Increment Firebase metrics counter (fire-and-forget, non-blocking)
+    import('./firebaseSync.js').then(m => m.incrementMetric('cv_downloads')).catch(() => {});
     
     await new Promise(resolve => setTimeout(resolve, 900));
     overlay.classList.remove('active');

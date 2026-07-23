@@ -1,0 +1,1463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin CMS Infrastructure | Pramesh Bhurtel</title>
+    <meta name="robots" content="noindex, nofollow">
+    <meta name="theme-color" content="#570000">
+
+    <link rel="icon" type="image/png" href="assets/images/thumbnail.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap">
+    
+    <link rel="stylesheet" href="src/css/tokens.css">
+    <link rel="stylesheet" href="src/css/layout.css">
+    <link rel="stylesheet" href="src/css/animations.css">
+    <link rel="stylesheet" href="src/css/reset.css">
+    <link rel="stylesheet" href="src/css/components.css">
+
+    <style>
+        :root {
+            --cms-sidebar-w: 260px;
+        }
+
+        body {
+            background: #080808;
+            color: var(--text);
+            min-height: 100vh;
+            font-family: var(--font-primary);
+        }
+
+        #cms-dashboard-wrapper {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* CMS Header Navbar */
+        .cms-navbar {
+            height: var(--header-height);
+            background: rgba(18, 18, 18, 0.85);
+            border-bottom: 1px solid var(--border-subtle);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 var(--space-xl);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+        }
+
+        .cms-brand {
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+        }
+
+        .cms-logo {
+            font-weight: 800;
+            font-size: 1.3rem;
+            color: var(--text);
+            display: flex;
+            align-items: center;
+            gap: var(--space-xs);
+        }
+
+        .cms-logo span {
+            color: var(--accent);
+        }
+
+        .cms-badge {
+            background: rgba(34, 197, 94, 0.15);
+            border: 1px solid rgba(34, 197, 94, 0.3);
+            color: #4ade80;
+            padding: 3px 12px;
+            border-radius: var(--radius-full);
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .cms-nav-actions {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+        }
+
+        .cms-btn-sm {
+            padding: var(--space-xs) var(--space-md);
+            font-size: 0.85rem;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            border: var(--glass-rim);
+            background: rgba(255, 255, 255, 0.04);
+            color: var(--text);
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-xs);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .cms-btn-sm:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        .cms-btn-primary {
+            background: var(--accent);
+            color: white;
+            border-color: var(--accent);
+            font-weight: 600;
+        }
+
+        .cms-btn-primary:hover {
+            background: var(--accent-2);
+            box-shadow: 0 0 15px var(--accent-glow);
+        }
+
+        .cms-btn-danger {
+            background: rgba(239, 68, 68, 0.15);
+            border-color: rgba(239, 68, 68, 0.3);
+            color: #f87171;
+        }
+
+        .cms-btn-danger:hover {
+            background: #ef4444;
+            color: white;
+        }
+
+        /* Layout Body */
+        .cms-body {
+            display: flex;
+            padding-top: var(--header-height);
+            min-height: 100vh;
+        }
+
+        /* Sidebar Navigation */
+        .cms-sidebar {
+            width: var(--cms-sidebar-w);
+            background: rgba(14, 14, 14, 0.9);
+            border-right: 1px solid var(--border-subtle);
+            padding: var(--space-xl) var(--space-md);
+            position: fixed;
+            top: var(--header-height);
+            bottom: 0;
+            left: 0;
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-xs);
+            z-index: 100;
+        }
+
+        .cms-tab-btn {
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+            padding: var(--space-md) var(--space-lg);
+            border-radius: var(--radius-md);
+            background: transparent;
+            border: none;
+            color: var(--muted);
+            font-size: 0.95rem;
+            font-weight: 500;
+            text-align: left;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            width: 100%;
+        }
+
+        .cms-tab-btn:hover {
+            color: var(--text);
+            background: rgba(255, 255, 255, 0.04);
+        }
+
+        .cms-tab-btn.active {
+            color: white;
+            background: rgba(225, 29, 72, 0.15);
+            border-left: 3px solid var(--accent);
+            font-weight: 600;
+        }
+
+        /* Main Workspace Content */
+        .cms-main {
+            margin-left: var(--cms-sidebar-w);
+            flex: 1;
+            padding: var(--space-2xl);
+            max-width: calc(100vw - var(--cms-sidebar-w));
+        }
+
+        .cms-state-container {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .cms-state-container.active {
+            display: block;
+        }
+
+        .cms-section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: var(--space-2xl);
+        }
+
+        .cms-section-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+
+        .cms-section-desc {
+            color: var(--muted);
+            font-size: 0.9rem;
+            margin-top: 4px;
+        }
+
+        /* Engine Metrics Grid */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: var(--space-lg);
+            margin-bottom: var(--space-2xl);
+        }
+
+        .metric-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-lg);
+            padding: var(--space-xl);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .metric-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: var(--accent-gradient);
+        }
+
+        .metric-label {
+            color: var(--muted);
+            font-size: 0.85rem;
+            margin-bottom: var(--space-xs);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .metric-value {
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: var(--text);
+        }
+
+        .metric-trend {
+            font-size: 0.8rem;
+            color: #4ade80;
+            margin-top: var(--space-xs);
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        /* Projects Grid Engine */
+        .project-cms-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: var(--space-xl);
+        }
+
+        .project-cms-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            transition: all var(--transition-fast);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .project-cms-card:hover {
+            border-color: var(--border-accent);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .project-cms-img-wrapper {
+            position: relative;
+            height: 190px;
+            width: 100%;
+            background: #141414;
+            overflow: hidden;
+        }
+
+        .project-cms-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .project-cms-body {
+            padding: var(--space-lg);
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+        }
+
+        .project-cms-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: var(--space-xs);
+        }
+
+        .project-cms-desc {
+            color: var(--muted);
+            font-size: 0.875rem;
+            line-height: 1.5;
+            margin-bottom: var(--space-md);
+            flex: 1;
+        }
+
+        .project-cms-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-bottom: var(--space-md);
+        }
+
+        .project-cms-tag {
+            background: rgba(225, 29, 72, 0.1);
+            color: var(--accent);
+            border: 1px solid rgba(225, 29, 72, 0.2);
+            font-size: 0.75rem;
+            padding: 3px 10px;
+            border-radius: var(--radius-sm);
+        }
+
+        .project-links-preview {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-bottom: var(--space-md);
+        }
+
+        .link-pill {
+            font-size: 0.75rem;
+            padding: 2px 8px;
+            border-radius: var(--radius-sm);
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-subtle);
+            color: var(--muted);
+        }
+
+        .project-cms-actions {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-top: var(--space-md);
+            border-top: 1px solid var(--border-subtle);
+        }
+
+        .order-controls {
+            display: flex;
+            gap: 4px;
+        }
+
+        .order-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-subtle);
+            color: var(--text);
+            width: 30px;
+            height: 30px;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            display: grid;
+            place-items: center;
+            font-size: 0.85rem;
+        }
+
+        .order-btn:hover:not(:disabled) {
+            background: var(--accent);
+            color: white;
+        }
+
+        .order-btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        /* Modal styling */
+        .cms-modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            z-index: 2000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: var(--space-lg);
+            opacity: 0;
+            visibility: hidden;
+            transition: all var(--transition-smooth);
+        }
+
+        .cms-modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .cms-modal-card {
+            background: #141414;
+            border: 1px solid var(--border-accent);
+            border-radius: var(--radius-lg);
+            width: 100%;
+            max-width: 650px;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: var(--space-2xl);
+            box-shadow: var(--shadow-lg), 0 0 40px var(--accent-glow);
+        }
+
+        .cms-modal-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: var(--space-lg);
+            padding-bottom: var(--space-sm);
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        .file-upload-box {
+            border: 2px dashed var(--border-accent);
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: var(--radius-md);
+            padding: var(--space-lg);
+            text-align: center;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            margin-bottom: var(--space-md);
+        }
+
+        .file-upload-box:hover {
+            background: rgba(225, 29, 72, 0.05);
+            border-color: var(--accent);
+        }
+
+        .file-upload-preview {
+            max-height: 120px;
+            max-width: 100%;
+            border-radius: var(--radius-sm);
+            margin-top: 10px;
+            display: none;
+        }
+
+        .custom-link-row {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .custom-link-row input {
+            flex: 1;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes metricPulse {
+            0%   { color: inherit; }
+            40%  { color: #4ade80; text-shadow: 0 0 12px rgba(74,222,128,.6); }
+            100% { color: inherit; }
+        }
+        .metric-pulse { animation: metricPulse .9s ease-out forwards; }
+        .metric-spinner { display:inline-block; animation: spinEl 1.4s linear infinite; }
+        @keyframes spinEl { to { transform: rotate(360deg); } }
+
+        @media (max-width: 768px) {
+            .cms-sidebar {
+                width: 70px;
+                padding: var(--space-md) var(--space-xs);
+            }
+            .cms-tab-btn span { display: none; }
+            .cms-main {
+                margin-left: 70px;
+                max-width: calc(100vw - 70px);
+                padding: var(--space-md);
+            }
+        }
+    </style>
+</head>
+<body>
+    <canvas id="grain-canvas" class="grain-canvas" aria-hidden="true"></canvas>
+
+    <div id="cms-dashboard-wrapper">
+        <!-- Top Navbar -->
+        <header class="cms-navbar">
+            <div class="cms-brand">
+                <div class="cms-logo">Pramesh<span>CMS</span></div>
+                <span class="cms-badge" id="firebase-status-badge">⏳ Connecting...</span>
+            </div>
+            <div class="cms-nav-actions">
+                <a href="index.html" target="_blank" class="cms-btn-sm">
+                    👁 Live Website
+                </a>
+                <button id="btn-export-data" class="cms-btn-sm">
+                    💾 Export Backup
+                </button>
+                <button id="btn-reset-data" class="cms-btn-sm cms-btn-danger">
+                    🔄 Reset Factory
+                </button>
+                <button id="btn-terminate-session" class="cms-btn-sm cms-btn-primary">
+                    🚪 Terminate Session
+                </button>
+            </div>
+        </header>
+
+        <!-- Sidebar & Main Container -->
+        <div class="cms-body">
+            <!-- Navigation Sidebar Map -->
+            <nav class="cms-sidebar">
+                <button class="cms-tab-btn active" data-tab="metrics">
+                    📊 <span>Live Engine Metrics</span>
+                </button>
+                <button class="cms-tab-btn" data-tab="deployments">
+                    🚀 <span>Project Deployments</span>
+                </button>
+                <button class="cms-tab-btn" data-tab="configs">
+                    ⚙️ <span>Global Configurations</span>
+                </button>
+                <button class="cms-tab-btn" data-tab="logs">
+                    📋 <span>Activity Audit Log</span>
+                </button>
+            </nav>
+
+            <!-- Main Content State Containers -->
+            <main class="cms-main">
+                <!-- State Container: Live Engine Metrics -->
+                <section id="tab-metrics" class="cms-state-container active">
+                    <div class="cms-section-header">
+                        <div>
+                            <h1 class="cms-section-title">Live Engine Metrics</h1>
+                            <p class="cms-section-desc">Real-time Firebase-synchronized telemetrics & portfolio analytics.</p>
+                        </div>
+                        <button id="btn-refresh-metrics" class="cms-btn-sm">🔄 Refresh</button>
+                    </div>
+
+                    <div class="metrics-grid">
+                        <div class="metric-card" id="mc-visits">
+                            <div class="metric-label">🌐 Total Site Visits</div>
+                            <div class="metric-value" id="metric-visits"><span class="metric-spinner">⏳</span></div>
+                            <div class="metric-trend" id="metric-visits-sub">Fetching from Firebase...</div>
+                        </div>
+                        <div class="metric-card" id="mc-cvs">
+                            <div class="metric-label">📄 CV Downloads</div>
+                            <div class="metric-value" id="metric-cvs"><span class="metric-spinner">⏳</span></div>
+                            <div class="metric-trend" id="metric-cvs-sub">Fetching from Firebase...</div>
+                        </div>
+                        <div class="metric-card" id="mc-forms">
+                            <div class="metric-label">✉️ Form Inquiries</div>
+                            <div class="metric-value" id="metric-forms"><span class="metric-spinner">⏳</span></div>
+                            <div class="metric-trend" id="metric-forms-sub">Fetching from Firebase...</div>
+                        </div>
+                        <div class="metric-card" id="mc-security">
+                            <div class="metric-label">🔐 Security Guard State</div>
+                            <div class="metric-value" id="metric-security" style="color: #4ade80;">Protected</div>
+                            <div class="metric-trend" id="metric-security-sub">Rate-limiter active &bull; 0 threats</div>
+                        </div>
+                    </div>
+
+                    <!-- Firebase Status Panel -->
+                    <div class="contact-form" style="margin-top: 20px;">
+                        <h3>🔥 Firebase Real-Time Pipeline</h3>
+                        <p style="color: var(--muted); margin-top: 5px; line-height: 1.7;">
+                            Metrics are fetched live via <strong style="color: var(--text);">Firebase Realtime Database</strong> <code>onValue()</code> listeners.
+                            Each visitor page load, CV download, and contact form submission increments the respective counter automatically.
+                            If Firebase is not yet configured, counters display <code>—</code> and the system falls back to localStorage.
+                        </p>
+                        <p style="color: var(--muted); margin-top: 8px;">
+                            <strong style="color: #4ade80;">✅ Status: Active & Connected</strong> — Connected to Firebase project <code>portfoliocms-22b8a</code> (Regional endpoint: <code>asia-southeast1</code>).
+                        </p>
+                    </div>
+
+                    <!-- Build Health Panel -->
+                    <div class="contact-form" style="margin-top: 16px;">
+                        <h3>⚙️ System Environment Health</h3>
+                        <p style="color: var(--muted); margin-top: 5px;">Vite static build optimization: Active &bull; Inlined CSS: Enabled &bull; Module Preload: Deferred &bull; Dual-Write Bridge: Online</p>
+                    </div>
+                </section>
+
+                <!-- State Container 2: Project Deployments Grid Engine -->
+                <section id="tab-deployments" class="cms-state-container">
+                    <div class="cms-section-header">
+                        <div>
+                            <h1 class="cms-section-title">Project Deployments Engine</h1>
+                            <p class="cms-section-desc">Create, update, reorder, and remove project deployments across your portfolio.</p>
+                        </div>
+                        <button id="btn-add-project" class="cms-btn-sm cms-btn-primary">
+                            + Add New Project
+                        </button>
+                    </div>
+
+                    <div id="projects-cms-container" class="project-cms-grid">
+                        <!-- Rendered dynamically -->
+                    </div>
+                </section>
+
+                <!-- State Container 3: Global Configurations -->
+                <section id="tab-configs" class="cms-state-container">
+                    <div class="cms-section-header">
+                        <div>
+                            <h1 class="cms-section-title">Global Configurations</h1>
+                            <p class="cms-section-desc">Customize Hero Title, About Me, Skills, Contact Details, and Social Media links.</p>
+                        </div>
+                        <button id="btn-save-global" class="cms-btn-sm cms-btn-primary">
+                            Save Global Configurations
+                        </button>
+                    </div>
+
+                    <form id="global-config-form" class="contact-form" style="max-width: 800px;">
+                        <h3 style="color: var(--accent); margin-bottom: 15px;">👤 Hero &amp; About Me Section</h3>
+                        <div class="form-group-grid">
+                            <div class="form-group">
+                                <label for="config-hero-greeting">Hero Greeting</label>
+                                <input type="text" id="config-hero-greeting" value="Hello, I'm Pramesh Bhurtel">
+                            </div>
+                            <div class="form-group">
+                                <label for="config-hero-title">Hero Title / Specialization</label>
+                                <input type="text" id="config-hero-title" value="Computer Science Student & Creative Developer">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="config-hero-bio">About Me Summary / Hero Bio</label>
+                            <textarea id="config-hero-bio" rows="4">I'm Pramesh, a passionate student driven by curiosity across technology, sports, and marketing. From programming and cybersecurity to creative fan engagement, I love blending innovation with strategy.</textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="config-skill-tags">Skill Tags (Comma separated)</label>
+                            <input type="text" id="config-skill-tags" value="HTML, CSS, JavaScript, Python, Capcut, Canva">
+                        </div>
+
+                        <h3 style="color: var(--accent); margin-top: 25px; margin-bottom: 15px;">📫 Contact &amp; Location Details</h3>
+                        <div class="form-group-grid">
+                            <div class="form-group">
+                                <label for="config-contact-email">Contact Email</label>
+                                <input type="email" id="config-contact-email" value="prameshbhurtel1@gmail.com">
+                            </div>
+                            <div class="form-group">
+                                <label for="config-contact-phone">Contact Phone</label>
+                                <input type="text" id="config-contact-phone" value="+977 9846236703">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="config-contact-location">Contact Location</label>
+                            <input type="text" id="config-contact-location" value="Kathmandu, Nepal">
+                        </div>
+
+                        <h3 style="color: var(--accent); margin-top: 25px; margin-bottom: 15px;">🌐 Social Media Profiles</h3>
+                        <div class="form-group-grid">
+                            <div class="form-group">
+                                <label for="config-facebook-url">Facebook Profile URL</label>
+                                <input type="url" id="config-facebook-url" value="https://www.facebook.com/pramesh.bhurtel.12">
+                            </div>
+                            <div class="form-group">
+                                <label for="config-instagram-url">Instagram Profile URL</label>
+                                <input type="url" id="config-instagram-url" value="https://www.instagram.com/pramesh_bhurtel/">
+                            </div>
+                        </div>
+
+                        <div class="form-group-grid">
+                            <div class="form-group">
+                                <label for="config-github-url">GitHub Profile URL</label>
+                                <input type="url" id="config-github-url" value="https://github.com/Pramesh-Bhurtel">
+                            </div>
+                            <div class="form-group">
+                                <label for="config-linkedin-url">LinkedIn Profile URL</label>
+                                <input type="url" id="config-linkedin-url" value="https://www.linkedin.com/in/prameshbhurtel/">
+                            </div>
+                        </div>
+                    </form>
+                </section>
+
+                <!-- Activity Audit Log -->
+                <section id="tab-logs" class="cms-state-container">
+                    <div class="cms-section-header">
+                        <div>
+                            <h1 class="cms-section-title">Activity Audit Log</h1>
+                            <p class="cms-section-desc">Chronological log of administrative actions and login attempts.</p>
+                        </div>
+                        <button id="btn-clear-log" class="cms-btn-sm cms-btn-danger">Clear Log</button>
+                    </div>
+
+                    <div class="contact-form">
+                        <ul id="activity-log-list" style="list-style: none; display: flex; flex-direction: column; gap: 10px;">
+                            <!-- Log items rendered dynamically -->
+                        </ul>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <!-- Project Add/Edit Modal -->
+    <div id="project-modal" class="cms-modal-overlay">
+        <div class="cms-modal-card">
+            <h2 id="project-modal-title" class="cms-modal-title">Add New Project</h2>
+            <form id="project-form">
+                <input type="hidden" id="project-id">
+                
+                <div class="form-group">
+                    <label for="project-title-input">Project Title</label>
+                    <input type="text" id="project-title-input" required placeholder="e.g. Next.js SaaS Web App">
+                </div>
+
+                <div class="form-group">
+                    <label for="project-desc-input">Description</label>
+                    <textarea id="project-desc-input" rows="3" required placeholder="Describe project key features..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Project Image (Upload File or Enter URL)</label>
+                    <div class="file-upload-box" id="upload-box">
+                        📁 <span>Click to select an image from your computer</span>
+                        <input type="file" id="project-file-input" accept="image/*" style="display: none;">
+                        <img id="upload-preview" class="file-upload-preview" alt="Preview">
+                    </div>
+                    <input type="text" id="project-img-input" placeholder="Or paste image URL (assets/images/pf.webp)">
+                </div>
+
+                <div class="form-group">
+                    <label for="project-tech-input">Tech Stack (comma separated)</label>
+                    <input type="text" id="project-tech-input" placeholder="HTML, CSS, JavaScript, React">
+                </div>
+
+                <!-- Dedicated Preset Links -->
+                <div class="form-group">
+                    <label for="project-github-input">Source Code (GitHub) URL</label>
+                    <input type="url" id="project-github-input" placeholder="https://github.com/...">
+                </div>
+
+                <div class="form-group-grid">
+                    <div class="form-group">
+                        <label for="project-facebook-input">Facebook Page/Post URL</label>
+                        <input type="url" id="project-facebook-input" placeholder="https://facebook.com/...">
+                    </div>
+                    <div class="form-group">
+                        <label for="project-instagram-input">Instagram Post/Profile URL</label>
+                        <input type="url" id="project-instagram-input" placeholder="https://instagram.com/...">
+                    </div>
+                </div>
+
+                <div class="form-group-grid">
+                    <div class="form-group">
+                        <label for="project-tiktok-input">TikTok Video URL</label>
+                        <input type="url" id="project-tiktok-input" placeholder="https://tiktok.com/@...">
+                    </div>
+                    <div class="form-group">
+                        <label for="project-youtube-input">YouTube Video URL</label>
+                        <input type="url" id="project-youtube-input" placeholder="https://youtube.com/watch?v=...">
+                    </div>
+                </div>
+
+                <!-- Dynamic Multiple Custom Action Buttons Builder -->
+                <div class="form-group" style="margin-top: 15px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                        <label style="margin-bottom: 0;">Custom Action Buttons (Custom Name + Custom URL)</label>
+                        <button type="button" id="btn-add-custom-link" class="cms-btn-sm cms-btn-primary" style="padding: 4px 12px; font-size: 0.8rem; display: flex; align-items: center; gap: 4px;">
+                            ➕ Add Custom Button
+                        </button>
+                    </div>
+                    <div id="custom-links-container" style="display: flex; flex-direction: column; gap: 8px;">
+                        <!-- Dynamic custom link rows rendered here -->
+                    </div>
+                </div>
+
+                <div style="display: flex; gap: 12px; justify-content: flex-end; margin-top: 25px;">
+                    <button type="button" id="btn-cancel-project" class="cms-btn-sm">Cancel</button>
+                    <button type="submit" class="cms-btn-sm cms-btn-primary">Save Project</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script type="module">
+        import { showSuccess, showError } from './src/js/modules/toast.js';
+        import {
+            initFirebase
+        } from './src/js/modules/firebase.js';
+        import {
+            fetchProjects, saveProjects, onProjectsChange,
+            fetchConfig, saveConfig,
+            onMetricsChange, fetchMetrics
+        } from './src/js/modules/firebaseSync.js';
+
+        // ── Default Project Seed Data ───────────────────────────────────
+        const defaultProjects = [
+            {
+                id: '1',
+                title: 'Gorkhas Spirit',
+                desc: 'A dedicated social media hub for Kathmandu Gorkhas, built to unite fans through engaging content, match updates, and interactive campaigns.',
+                image: 'assets/images/gorkhas.spirit.webp',
+                tech: ['Facebook', 'Instagram', 'TikTok', 'Canva', 'Capcut'],
+                githubUrl: '', facebookUrl: 'https://www.facebook.com/gorkhas.spirit',
+                instagramUrl: 'https://www.instagram.com/gorkhas.spirit',
+                tiktokUrl: 'https://www.tiktok.com/@gorkhas.spirit', youtubeUrl: '',
+                customLinks: []
+            },
+            {
+                id: '2',
+                title: 'Portfolio Website',
+                desc: 'A modern, responsive portfolio website designed to highlight projects, skills, and achievements with smooth animations and clean layout.',
+                image: 'assets/images/pf.webp',
+                tech: ['HTML', 'CSS', 'JavaScript'],
+                githubUrl: 'https://github.com/Pramesh-Bhurtel/Portfolio',
+                facebookUrl: '', instagramUrl: '', tiktokUrl: '', youtubeUrl: '',
+                customLinks: [{ label: 'Source Code', url: 'https://github.com/Pramesh-Bhurtel/Portfolio' }]
+            },
+            {
+                id: '3',
+                title: 'Nepal Premier League S2',
+                desc: 'Box Office Volunteer during the Nepal Premier League. Handled ticket sales, crowd coordination, and customer queries during match days.',
+                image: 'assets/images/box.office.webp',
+                tech: ['Khalti Events', 'Empowerment Hub'],
+                githubUrl: '', facebookUrl: '', instagramUrl: '', tiktokUrl: '', youtubeUrl: '',
+                customLinks: []
+            },
+            {
+                id: '4',
+                title: 'ViperHarmonics',
+                desc: 'A high-fidelity digital harmonium featuring real-time audio synthesis, MIDI support, and a professional QR-based notation sharing system.',
+                image: 'assets/images/ViperHarmonics.webp',
+                tech: ['Web Audio API', 'JavaScript', 'CSS3', 'MIDI'],
+                githubUrl: 'https://github.com/Pramesh-Bhurtel/ViperHarmonics',
+                facebookUrl: '', instagramUrl: '', tiktokUrl: '', youtubeUrl: '',
+                customLinks: [{ label: 'Live Demo', url: 'https://pramesh-bhurtel.github.io/ViperHarmonics/' }]
+            },
+            {
+                id: '5',
+                title: 'Fire Ninja',
+                desc: 'A blazing arcade slash game where you slice fireballs, dodge bombs, and unleash the ultimate Fire Nova with smooth physics.',
+                image: 'assets/images/fire_ninja.webp',
+                tech: ['HTML5 Canvas', 'JavaScript', 'CSS3'],
+                githubUrl: 'https://github.com/Pramesh-Bhurtel/fire-ninja',
+                facebookUrl: '', instagramUrl: '', tiktokUrl: '', youtubeUrl: '',
+                customLinks: [{ label: 'Play Game', url: 'https://pramesh-bhurtel.github.io/fire-ninja/' }]
+            }
+        ];
+
+        // ── localStorage helpers (Dual-Write fallback layer) ────────────
+        const LS = {
+            getProjects: () => { try { return JSON.parse(localStorage.getItem('cms_projects')) || defaultProjects; } catch { return defaultProjects; } },
+            getConfig: () => { try { return JSON.parse(localStorage.getItem('cms_config')) || {}; } catch { return {}; } },
+            getLogs: () => { try { return JSON.parse(localStorage.getItem('cms_logs')) || []; } catch { return []; } },
+            saveProjects: v => { try { localStorage.setItem('cms_projects', JSON.stringify(v)); } catch {} },
+            saveConfig: v => { try { localStorage.setItem('cms_config', JSON.stringify(v)); } catch {} },
+            saveLogs: v => { try { localStorage.setItem('cms_logs', JSON.stringify(v)); } catch {} },
+        };
+
+        // ── Application State ───────────────────────────────────────────
+        let store = {
+            projects: LS.getProjects(),
+            config: LS.getConfig(),
+            logs: LS.getLogs(),
+        };
+
+        let metricsUnsubscribe = null;
+        let projectsUnsubscribe = null;
+
+        // ── Firebase Connection Status Badge ────────────────────────────
+        const statusBadge = document.getElementById('firebase-status-badge');
+
+        function setFirebaseStatus(state) {
+            if (!statusBadge) return;
+            const states = {
+                connecting: { text: '⏳ Connecting...', bg: 'rgba(234,179,8,0.15)', border: 'rgba(234,179,8,0.3)', color: '#facc15' },
+                online:     { text: '🔥 Firebase Live',  bg: 'rgba(34,197,94,0.15)',  border: 'rgba(34,197,94,0.3)',  color: '#4ade80' },
+                offline:    { text: '📦 Offline Mode',   bg: 'rgba(148,163,184,0.15)', border: 'rgba(148,163,184,0.3)', color: '#94a3b8' },
+                error:      { text: '⚠️ No Config',      bg: 'rgba(239,68,68,0.15)',   border: 'rgba(239,68,68,0.3)',   color: '#f87171' },
+            };
+            const s = states[state] || states.offline;
+            statusBadge.textContent = s.text;
+            statusBadge.style.cssText = `background:${s.bg};border:1px solid ${s.border};color:${s.color};padding:3px 12px;border-radius:999px;font-size:.75rem;font-weight:600;text-transform:uppercase;letter-spacing:.5px;`;
+        }
+
+        // ── Metric Card Pulse Animation ─────────────────────────────────
+        function updateMetricCard(id, value, subText, trendClass) {
+            const el = document.getElementById(id);
+            const sub = document.getElementById(id + '-sub');
+            if (el) {
+                el.textContent = value !== undefined && value !== null ? value.toLocaleString() : '—';
+                el.classList.remove('metric-pulse');
+                void el.offsetWidth; // force reflow
+                el.classList.add('metric-pulse');
+            }
+            if (sub && subText) sub.textContent = subText;
+        }
+
+        function renderSecurityState() {
+            const lockoutUntil = parseInt(localStorage.getItem('cms_security_lockout_until') || '0', 10);
+            const failCount    = parseInt(localStorage.getItem('cms_failed_login_count') || '0', 10);
+            const el  = document.getElementById('metric-security');
+            const sub = document.getElementById('metric-security-sub');
+
+            if (lockoutUntil && Date.now() < lockoutUntil) {
+                const remainSec = Math.ceil((lockoutUntil - Date.now()) / 1000);
+                if (el)  { el.textContent = '🚨 Locked'; el.style.color = '#f87171'; }
+                if (sub) sub.textContent = `Lockdown active — ${remainSec}s remaining`;
+            } else {
+                if (el)  { el.textContent = 'Protected'; el.style.color = '#4ade80'; }
+                if (sub) sub.textContent = `Rate-limiter active • ${failCount} recent attempt(s)`;
+            }
+        }
+
+        // ── Elements ────────────────────────────────────────────────────
+        const tabs              = document.querySelectorAll('.cms-tab-btn');
+        const containers        = document.querySelectorAll('.cms-state-container');
+        const projectsContainer = document.getElementById('projects-cms-container');
+        const projectModal      = document.getElementById('project-modal');
+        const projectForm       = document.getElementById('project-form');
+        const fileInput         = document.getElementById('project-file-input');
+        const uploadBox         = document.getElementById('upload-box');
+        const uploadPreview     = document.getElementById('upload-preview');
+        const customLinksContainer = document.getElementById('custom-links-container');
+        const btnAddCustomLink  = document.getElementById('btn-add-custom-link');
+
+        // ── Dynamic Custom Action Buttons Row Builder ──────────────────
+        function addCustomLinkRow(label = '', url = '') {
+            if (!customLinksContainer) return;
+            const row = document.createElement('div');
+            row.className = 'custom-link-row';
+            row.style.cssText = 'display: flex; gap: 8px; align-items: center; background: rgba(255,255,255,0.03); padding: 8px; border-radius: 8px; border: var(--glass-rim);';
+            row.innerHTML = `
+                <div style="display: flex; flex-direction: column; gap: 2px;">
+                    <button type="button" class="order-btn btn-link-up" title="Move Up" style="padding: 2px 6px; font-size: 0.7rem; height: 16px; line-height: 12px;">↑</button>
+                    <button type="button" class="order-btn btn-link-down" title="Move Down" style="padding: 2px 6px; font-size: 0.7rem; height: 16px; line-height: 12px;">↓</button>
+                </div>
+                <input type="text" class="custom-link-label" placeholder="Button Label (e.g. Live Demo, Docs, Website)" value="${label}" style="flex: 1;">
+                <input type="url" class="custom-link-url" placeholder="URL (https://...)" value="${url}" style="flex: 1.4;">
+                <button type="button" class="cms-btn-sm cms-btn-danger btn-link-remove" style="padding: 6px 10px; height: 38px;" title="Remove Link">🗑</button>
+            `;
+            customLinksContainer.appendChild(row);
+        }
+
+        if (btnAddCustomLink) {
+            btnAddCustomLink.addEventListener('click', () => addCustomLinkRow());
+        }
+
+        if (customLinksContainer) {
+            customLinksContainer.addEventListener('click', (e) => {
+                const row = e.target.closest('.custom-link-row');
+                if (!row) return;
+
+                if (e.target.closest('.btn-link-remove')) {
+                    row.remove();
+                } else if (e.target.closest('.btn-link-up')) {
+                    const prev = row.previousElementSibling;
+                    if (prev) customLinksContainer.insertBefore(row, prev);
+                } else if (e.target.closest('.btn-link-down')) {
+                    const next = row.nextElementSibling;
+                    if (next) customLinksContainer.insertBefore(next, row);
+                }
+            });
+        }
+
+        // ── Tab Navigation ──────────────────────────────────────────────
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                const target = tab.dataset.tab;
+                tabs.forEach(t => t.classList.remove('active'));
+                containers.forEach(c => c.classList.remove('active'));
+                tab.classList.add('active');
+                document.getElementById(`tab-${target}`).classList.add('active');
+                if (target === 'metrics') renderSecurityState();
+            });
+        });
+
+        // ── Project Card Renderer (DocumentFragment) ────────────────────
+        function renderProjects(projects) {
+            store.projects = projects;
+            LS.saveProjects(projects); // always keep localStorage in sync
+
+            const frag = document.createDocumentFragment();
+            projects.forEach((proj, index) => {
+                const links = [];
+                if (proj.githubUrl)   links.push('GitHub');
+                if (proj.facebookUrl) links.push('Facebook');
+                if (proj.instagramUrl)links.push('Instagram');
+                if (proj.tiktokUrl)   links.push('TikTok');
+                if (proj.youtubeUrl)  links.push('YouTube');
+                
+                if (Array.isArray(proj.customLinks)) {
+                    proj.customLinks.forEach(l => { if (l.label) links.push(l.label); });
+                } else {
+                    if (proj.customLabel) links.push(proj.customLabel);
+                    if (proj.demoUrl)     links.push('Live Demo');
+                }
+
+                const card = document.createElement('div');
+                card.className = 'project-cms-card';
+                card.innerHTML = `
+                    <div class="project-cms-img-wrapper">
+                        <img src="${proj.image}" alt="${proj.title}" class="project-cms-img"
+                             onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\\'http://www.w3.org/2000/svg\\' width=\\'100\\' height=\\'100\\'><rect fill=\\'%231f2937\\' width=\\'100\\' height=\\'100\\'/><text fill=\\'%239ca3af\\' x=\\'50%\\' y=\\'50%\\' text-anchor=\\'middle\\'  dy=\\'.35em\\'  font-size=\\'12\\' font-family=\\'sans-serif\\'>No Image</text></svg>'">
+                    </div>
+                    <div class="project-cms-body">
+                        <h3 class="project-cms-title">${proj.title}</h3>
+                        <p class="project-cms-desc">${proj.desc}</p>
+                        <div class="project-cms-tags">
+                            ${(proj.tech || []).map(t => `<span class="project-cms-tag">${t}</span>`).join('')}
+                        </div>
+                        <div class="project-links-preview">
+                            ${links.map(l => `<span class="link-pill">${l}</span>`).join('')}
+                        </div>
+                        <div class="project-cms-actions">
+                            <div class="order-controls">
+                                <button class="order-btn" data-action="up" data-index="${index}" ${index === 0 ? 'disabled' : ''} title="Move Up">↑</button>
+                                <button class="order-btn" data-action="down" data-index="${index}" ${index === projects.length - 1 ? 'disabled' : ''} title="Move Down">↓</button>
+                            </div>
+                            <div style="display:flex;gap:6px;">
+                                <button class="cms-btn-sm" data-action="edit" data-id="${proj.id}">✏️ Edit</button>
+                                <button class="cms-btn-sm cms-btn-danger" data-action="delete" data-id="${proj.id}">🗑 Delete</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                frag.appendChild(card);
+            });
+
+            projectsContainer.innerHTML = '';
+            projectsContainer.appendChild(frag);
+        }
+
+        // ── Project CRUD Actions ────────────────────────────────────────
+        projectsContainer.addEventListener('click', async (e) => {
+            const btn    = e.target.closest('button');
+            if (!btn) return;
+            const action = btn.dataset.action;
+            const index  = parseInt(btn.dataset.index, 10);
+            const id     = btn.dataset.id;
+            let projects = [...store.projects];
+
+            if (action === 'up' && index > 0) {
+                [projects[index], projects[index - 1]] = [projects[index - 1], projects[index]];
+                await persistProjects(projects);
+                logActivity(`Moved project "${projects[index - 1].title}" up.`);
+                showSuccess('Project reordered');
+            } else if (action === 'down' && index < projects.length - 1) {
+                [projects[index], projects[index + 1]] = [projects[index + 1], projects[index]];
+                await persistProjects(projects);
+                logActivity(`Moved project "${projects[index + 1].title}" down.`);
+                showSuccess('Project reordered');
+            } else if (action === 'delete') {
+                const proj = projects.find(p => p.id === id);
+                if (proj && confirm(`Delete project "${proj.title}"?`)) {
+                    projects = projects.filter(p => p.id !== id);
+                    await persistProjects(projects);
+                    logActivity(`Deleted project "${proj.title}".`);
+                    showSuccess('Project removed');
+                }
+            } else if (action === 'edit') {
+                const proj = store.projects.find(p => p.id === id);
+                openProjectModal(proj);
+            }
+        });
+
+        // ── Persist projects → Firebase + localStorage ──────────────────
+        async function persistProjects(projects) {
+            renderProjects(projects);
+            const saved = await saveProjects(projects);
+            if (!saved) console.warn('[CMS] Firebase write failed — localStorage only.');
+        }
+
+        // ── Image File Picker ───────────────────────────────────────────
+        uploadBox.addEventListener('click', () => fileInput.click());
+        fileInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (evt) => {
+                    document.getElementById('project-img-input').value = evt.target.result;
+                    uploadPreview.src = evt.target.result;
+                    uploadPreview.style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // ── Project Modal ───────────────────────────────────────────────
+        function openProjectModal(proj = null) {
+            projectModal.classList.add('active');
+            document.getElementById('project-modal-title').textContent = proj ? 'Edit Project Deployment' : 'Add New Project';
+            document.getElementById('project-id').value             = proj ? proj.id : '';
+            document.getElementById('project-title-input').value    = proj ? proj.title : '';
+            document.getElementById('project-desc-input').value     = proj ? proj.desc : '';
+            document.getElementById('project-img-input').value      = proj ? proj.image : '';
+            document.getElementById('project-tech-input').value     = proj ? (proj.tech || []).join(', ') : '';
+            document.getElementById('project-github-input').value   = proj ? (proj.githubUrl || '') : '';
+            document.getElementById('project-facebook-input').value = proj ? (proj.facebookUrl || '') : '';
+            document.getElementById('project-instagram-input').value= proj ? (proj.instagramUrl || '') : '';
+            document.getElementById('project-tiktok-input').value   = proj ? (proj.tiktokUrl || '') : '';
+            document.getElementById('project-youtube-input').value  = proj ? (proj.youtubeUrl || '') : '';
+
+            // Hydrate dynamic custom link rows
+            customLinksContainer.innerHTML = '';
+            let linksToHydrate = proj && Array.isArray(proj.customLinks) ? [...proj.customLinks] : [];
+            if (proj && !linksToHydrate.length) {
+                if (proj.customLabel && proj.customUrl) linksToHydrate.push({ label: proj.customLabel, url: proj.customUrl });
+                if (proj.demoUrl) linksToHydrate.push({ label: 'Live Demo', url: proj.demoUrl });
+            }
+            linksToHydrate.forEach(l => addCustomLinkRow(l.label, l.url));
+
+            uploadPreview.src = proj && proj.image ? proj.image : '';
+            uploadPreview.style.display = proj && proj.image ? 'block' : 'none';
+        }
+
+        function closeProjectModal() {
+            projectModal.classList.remove('active');
+            projectForm.reset();
+            if (customLinksContainer) customLinksContainer.innerHTML = '';
+            uploadPreview.style.display = 'none';
+        }
+
+        document.getElementById('btn-add-project').addEventListener('click', () => openProjectModal());
+        document.getElementById('btn-cancel-project').addEventListener('click', closeProjectModal);
+
+        projectForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const id           = document.getElementById('project-id').value;
+            const title        = document.getElementById('project-title-input').value.trim();
+            const desc         = document.getElementById('project-desc-input').value.trim();
+            const image        = document.getElementById('project-img-input').value.trim();
+            const tech         = document.getElementById('project-tech-input').value.split(',').map(t => t.trim()).filter(Boolean);
+            const githubUrl    = document.getElementById('project-github-input').value.trim();
+            const facebookUrl  = document.getElementById('project-facebook-input').value.trim();
+            const instagramUrl = document.getElementById('project-instagram-input').value.trim();
+            const tiktokUrl    = document.getElementById('project-tiktok-input').value.trim();
+            const youtubeUrl   = document.getElementById('project-youtube-input').value.trim();
+
+            const customLinks = Array.from(customLinksContainer.querySelectorAll('.custom-link-row')).map(row => ({
+                label: row.querySelector('.custom-link-label').value.trim(),
+                url: row.querySelector('.custom-link-url').value.trim()
+            })).filter(l => l.label && l.url);
+
+            const newData = { title, desc, image, tech, githubUrl, facebookUrl, instagramUrl, tiktokUrl, youtubeUrl, customLinks };
+
+            let projects = [...store.projects];
+
+            if (id) {
+                const i = projects.findIndex(p => p.id === id);
+                if (i > -1) projects[i] = { ...projects[i], ...newData };
+                logActivity(`Updated project "${title}".`);
+                showSuccess('Project updated — syncing to Firebase...');
+            } else {
+                projects.push({ id: Date.now().toString(), ...newData });
+                logActivity(`Created project "${title}".`);
+                showSuccess('Project created — syncing to Firebase...');
+            }
+
+            await persistProjects(projects);
+            closeProjectModal();
+        });
+
+        // ── Global Config ───────────────────────────────────────────────
+        const defaultConfig = {
+            heroGreeting: "Hello, I'm Pramesh Bhurtel",
+            heroTitle: "Computer Science Student & Creative Developer",
+            heroBio: "I'm Pramesh, a passionate student driven by curiosity across technology, sports, and marketing. From programming and cybersecurity to creative fan engagement, I love blending innovation with strategy.",
+            skills: ['HTML', 'CSS', 'JavaScript', 'Python', 'Capcut', 'Canva'],
+            contactEmail: 'prameshbhurtel1@gmail.com',
+            contactPhone: '+977 9846236703',
+            contactLocation: 'Kathmandu, Nepal',
+            facebookUrl: 'https://www.facebook.com/pramesh.bhurtel.12',
+            instagramUrl: 'https://www.instagram.com/pramesh_bhurtel/',
+            githubUrl: 'https://github.com/Pramesh-Bhurtel',
+            linkedinUrl: 'https://www.linkedin.com/in/prameshbhurtel/'
+        };
+
+        async function hydrateGlobalConfig() {
+            const config = await fetchConfig();
+            store.config = { ...defaultConfig, ...config };
+            document.getElementById('config-hero-greeting').value = store.config.heroGreeting || defaultConfig.heroGreeting;
+            document.getElementById('config-hero-title').value    = store.config.heroTitle || defaultConfig.heroTitle;
+            document.getElementById('config-hero-bio').value      = store.config.heroBio || defaultConfig.heroBio;
+            document.getElementById('config-skill-tags').value    = (store.config.skills && store.config.skills.length ? store.config.skills : defaultConfig.skills).join(', ');
+            document.getElementById('config-contact-email').value = store.config.contactEmail || defaultConfig.contactEmail;
+            document.getElementById('config-contact-phone').value = store.config.contactPhone || defaultConfig.contactPhone;
+            document.getElementById('config-contact-location').value = store.config.contactLocation || defaultConfig.contactLocation;
+            document.getElementById('config-facebook-url').value  = store.config.facebookUrl || defaultConfig.facebookUrl;
+            document.getElementById('config-instagram-url').value = store.config.instagramUrl || defaultConfig.instagramUrl;
+            document.getElementById('config-github-url').value    = store.config.githubUrl || defaultConfig.githubUrl;
+            document.getElementById('config-linkedin-url').value  = store.config.linkedinUrl || defaultConfig.linkedinUrl;
+        }
+
+        document.getElementById('btn-save-global').addEventListener('click', async () => {
+            store.config.heroGreeting    = document.getElementById('config-hero-greeting').value.trim();
+            store.config.heroTitle       = document.getElementById('config-hero-title').value.trim();
+            store.config.heroBio         = document.getElementById('config-hero-bio').value.trim();
+            store.config.skills          = document.getElementById('config-skill-tags').value.split(',').map(s => s.trim()).filter(Boolean);
+            store.config.contactEmail    = document.getElementById('config-contact-email').value.trim();
+            store.config.contactPhone    = document.getElementById('config-contact-phone').value.trim();
+            store.config.contactLocation = document.getElementById('config-contact-location').value.trim();
+            store.config.facebookUrl     = document.getElementById('config-facebook-url').value.trim();
+            store.config.instagramUrl    = document.getElementById('config-instagram-url').value.trim();
+            store.config.githubUrl       = document.getElementById('config-github-url').value.trim();
+            store.config.linkedinUrl     = document.getElementById('config-linkedin-url').value.trim();
+
+            LS.saveConfig(store.config);
+            const saved = await saveConfig(store.config);
+            logActivity('Saved Global Configurations (Hero, Bio, Skills, Contact Info, Social Links).');
+            showSuccess(saved ? 'Config saved to Firebase ✓' : 'Config saved locally (Firebase offline)');
+        });
+
+        // ── Activity Log ────────────────────────────────────────────────
+        function logActivity(text) {
+            store.logs.unshift({ time: new Date().toLocaleString(), text });
+            if (store.logs.length > 30) store.logs.pop();
+            LS.saveLogs(store.logs);
+            renderLogs();
+        }
+
+        function renderLogs() {
+            const list = document.getElementById('activity-log-list');
+            if (!list) return;
+            list.innerHTML = store.logs.map(l => `
+                <li style="padding:12px;background:rgba(255,255,255,0.03);border-radius:8px;font-size:.85rem;border:var(--glass-rim);">
+                    <span style="color:var(--accent);font-family:var(--font-mono);margin-right:10px;">[${l.time}]</span>
+                    <span>${l.text}</span>
+                </li>
+            `).join('');
+        }
+
+        document.getElementById('btn-clear-log').addEventListener('click', () => {
+            store.logs = [];
+            LS.saveLogs([]);
+            renderLogs();
+            showSuccess('Activity log cleared');
+        });
+
+        // ── Export & Reset ──────────────────────────────────────────────
+        document.getElementById('btn-export-data').addEventListener('click', () => {
+            const dataStr = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(store, null, 2));
+            const a = document.createElement('a');
+            a.href = dataStr;
+            a.download = 'portfolio_cms_backup.json';
+            a.click();
+            logActivity('Exported CMS backup.');
+            showSuccess('Backup exported successfully!');
+        });
+
+        document.getElementById('btn-reset-data').addEventListener('click', async () => {
+            if (confirm('Reset ALL CMS data back to factory defaults? This cannot be undone.')) {
+                localStorage.removeItem('cms_projects');
+                localStorage.removeItem('cms_config');
+                localStorage.removeItem('cms_logs');
+                // Also clear Firebase nodes if online
+                const { db } = await initFirebase();
+                if (db) {
+                    try {
+                        const { ref, remove } = await import('https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js');
+                        await remove(ref(db, 'portfolio/projects'));
+                        await remove(ref(db, 'portfolio/config'));
+                    } catch (err) { console.warn('[CMS] Firebase reset failed:', err); }
+                }
+                store = { projects: defaultProjects, config: {}, logs: [] };
+                await persistProjects(defaultProjects);
+                await hydrateGlobalConfig();
+                renderLogs();
+                showSuccess('CMS factory settings restored!');
+            }
+        });
+
+        // ── Refresh Metrics Button ──────────────────────────────────────
+        document.getElementById('btn-refresh-metrics').addEventListener('click', async () => {
+            const metrics = await fetchMetrics();
+            applyMetrics(metrics);
+            renderSecurityState();
+            showSuccess('Metrics refreshed!');
+        });
+
+        // ── Terminate Session ───────────────────────────────────────────
+        document.getElementById('btn-terminate-session').addEventListener('click', () => {
+            logActivity('Admin CMS session terminated by user.');
+            showSuccess('Session terminated. Returning to main website...');
+            setTimeout(() => { window.location.href = 'index.html'; }, 1000);
+        });
+
+        // ── Metrics Rendering ───────────────────────────────────────────
+        function applyMetrics(metrics) {
+            updateMetricCard('metric-visits', metrics.total_visits,       'All-time portfolio page loads');
+            updateMetricCard('metric-cvs',    metrics.cv_downloads,       'Total CV file downloads');
+            updateMetricCard('metric-forms',  metrics.form_submissions,   'Contact form submissions');
+        }
+
+        // ── Advanced Device Telemetry & Location Lookup ────────────────
+        const ALERT_EMAIL_KEY = 'cms_last_alert_email_timestamp';
+        const ONE_DAY_MS = 24 * 60 * 60 * 1000; // 24 hours
+
+        async function getDetailedDeviceTelemetry() {
+            const ua = navigator.userAgent;
+
+            // 1. Browser Detection
+            let browser = "Unknown Browser";
+            if (ua.includes("Edg/")) browser = "Microsoft Edge (" + (ua.split("Edg/")[1] || "").split(" ")[0] + ")";
+            else if (ua.includes("Chrome/")) browser = "Google Chrome (" + (ua.split("Chrome/")[1] || "").split(" ")[0] + ")";
+            else if (ua.includes("Firefox/")) browser = "Mozilla Firefox (" + (ua.split("Firefox/")[1] || "").split(" ")[0] + ")";
+            else if (ua.includes("Safari/") && !ua.includes("Chrome")) browser = "Apple Safari (" + (ua.split("Version/")[1] || "").split(" ")[0] + ")";
+            else if (ua.includes("OPR/") || ua.includes("Opera/")) browser = "Opera Browser";
+
+            // 2. OS & Device Model Detection
+            let os = "Unknown OS";
+            if (ua.includes("Win")) os = "Windows PC";
+            else if (ua.includes("Mac")) os = "Macintosh (macOS)";
+            else if (ua.includes("Linux")) os = "Linux PC";
+            else if (ua.includes("Android")) {
+                const match = ua.match(/Android\s+([\d.]+);?\s*([^;)]+)?/);
+                os = match ? `Android ${match[1]} (${match[2] || 'Mobile Device'})` : 'Android Mobile';
+            } else if (ua.includes("iPhone")) os = "Apple iPhone";
+            else if (ua.includes("iPad")) os = "Apple iPad";
+
+            // 3. Screen & Hardware Details
+            const screenRes = `${window.screen.width}x${window.screen.height} (Scale: ${window.devicePixelRatio || 1}x)`;
+            const cores = navigator.hardwareConcurrency ? `${navigator.hardwareConcurrency} Cores` : 'N/A';
+            const memory = navigator.deviceMemory ? `${navigator.deviceMemory} GB RAM` : 'N/A';
+
+            // GPU Hardware Graphics Renderer
+            let gpu = 'Standard Graphics';
+            try {
+                const canvas = document.createElement('canvas');
+                const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+                if (gl) {
+                    const debugInfo = gl.getExtension('WEBGL_debug_renderer_info');
+                    if (debugInfo) {
+                        gpu = gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL);
+                    }
+                }
+            } catch (e) {}
+
+            // 4. IP Geolocation Lookup (Fast, non-blocking 2.5s limit)
+            let loc = { ip: 'Unknown IP', city: 'Unknown City', country: 'Unknown Country', isp: 'Unknown Provider' };
+            try {
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 2500);
+                const res = await fetch('https://ipapi.co/json/', { signal: controller.signal });
+                clearTimeout(timeoutId);
+                if (res.ok) {
+                    const data = await res.json();
+                    loc = {
+                        ip: data.ip || 'Unknown IP',
+                        city: `${data.city || ''}, ${data.region || ''}`,
+                        country: `${data.country_name || ''} ${data.country_code ? '(' + data.country_code + ')' : ''}`,
+                        isp: data.org || data.asn || 'Unknown Provider'
+                    };
+                }
+            } catch (err) {}
+
+            return { browser, os, screenRes, cores, memory, gpu, ...loc };
+        }
+
+        async function sendAdminLoginEmailAlert(telemetry) {
+            const lastSent = parseInt(localStorage.getItem(ALERT_EMAIL_KEY) || '0', 10);
+            const now = Date.now();
+
+            // Rate-limit: Maximum 1 email per device per 24 hours
+            if (lastSent && (now - lastSent < ONE_DAY_MS)) {
+                console.info('[CMS] Security alert email rate-limited (1 email per device per 24 hours).');
+                return;
+            }
+
+            const alertMessage = [
+                `🚨 ADMIN CMS ACCESS SECURITY ALERT`,
+                ``,
+                `Time: ${new Date().toLocaleString()}`,
+                ``,
+                `📍 GEOGRAPHIC & NETWORK LOCATION`,
+                `• IP Address: ${telemetry.ip}`,
+                `• City/Region: ${telemetry.city}`,
+                `• Country: ${telemetry.country}`,
+                `• Network ISP: ${telemetry.isp}`,
+                ``,
+                `💻 DEVICE & BROWSER SPECIFICATIONS`,
+                `• Device / OS: ${telemetry.os}`,
+                `• Browser: ${telemetry.browser}`,
+                `• Screen Resolution: ${telemetry.screenRes}`,
+                `• Hardware Specs: ${telemetry.cores} | ${telemetry.memory}`,
+                `• GPU Renderer: ${telemetry.gpu}`,
+                ``,
+                `• Full User Agent: ${navigator.userAgent}`
+            ].join('\n');
+
+            try {
+                const script = document.createElement('script');
+                script.src = 'https://cdn.jsdelivr.net/npm/@emailjs/browser@4.4.1/dist/email.min.js';
+                script.onload = () => {
+                    if (window.emailjs) {
+                        window.emailjs.init('uPoSjG7bVcAb_0Nhy');
+                        window.emailjs.send('service_ninaz6r', 'template_ere1ozg', {
+                            to_name: 'Pramesh Bhurtel',
+                            to_email: 'prameshbhurtel1@gmail.com',
+                            from_name: 'Portfolio CMS Security',
+                            subject: `🚨 Admin CMS Access Alert: ${telemetry.os} (${telemetry.city})`,
+                            message: alertMessage
+                        }).then(() => {
+                            localStorage.setItem(ALERT_EMAIL_KEY, now.toString());
+                        }).catch(() => {});
+                    }
+                };
+                document.head.appendChild(script);
+            } catch(e) {}
+        }
+
+        // ── Initialise ──────────────────────────────────────────────────
+        (async () => {
+            setFirebaseStatus('connecting');
+            const telemetry = await getDetailedDeviceTelemetry();
+            logActivity(`Admin CMS session started [${telemetry.os} | ${telemetry.browser} | IP: ${telemetry.ip} | ${telemetry.city}, ${telemetry.country}]`);
+            sendAdminLoginEmailAlert(telemetry);
+            renderLogs();
+
+            // Render from localStorage immediately (zero-latency)
+            renderProjects(store.projects);
+            renderSecurityState();
+            await hydrateGlobalConfig();
+
+            // Attempt Firebase connection
+            const { db } = await initFirebase();
+
+            if (db) {
+                setFirebaseStatus('online');
+
+                // Bind real-time projects listener
+                projectsUnsubscribe = await onProjectsChange((projects) => {
+                    renderProjects(projects);
+                });
+
+                // Bind real-time metrics listener
+                metricsUnsubscribe = await onMetricsChange((metrics) => {
+                    applyMetrics(metrics);
+                });
+            } else {
+                // Check if it's a missing config vs a real error
+                const { FIREBASE_CONFIG } = await import('./src/js/modules/firebase.js');
+                setFirebaseStatus(FIREBASE_CONFIG.apiKey === 'YOUR_API_KEY' ? 'error' : 'offline');
+                // Show dashes in metric cards to indicate offline
+                applyMetrics({ total_visits: null, cv_downloads: null, form_submissions: null });
+            }
+        })();
+    </script>
+</body>
+</html>

@@ -10,7 +10,8 @@ export default defineConfig({
     rollupOptions: {
       input: {
         main: './index.html',
-        notFound: './404.html'
+        notFound: './404.html',
+        adminDashboard: './admin-dashboard.html'
       }
     }
   },

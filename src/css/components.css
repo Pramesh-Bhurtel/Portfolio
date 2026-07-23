@@ -351,3 +351,129 @@
 .toast.info {
   border-color: #3b82f6;
 }
+
+/* ==========================================
+   Admin CMS Login Modal
+   ========================================== */
+.admin-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 4000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity var(--transition-smooth), visibility var(--transition-smooth);
+  padding: var(--space-md);
+}
+
+.admin-modal-overlay.active {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.admin-modal-card {
+  position: relative;
+  width: 100%;
+  max-width: 26.25rem;
+  background: var(--glass-bg);
+  border: 1px solid var(--border-accent);
+  border-radius: var(--radius-lg);
+  padding: var(--space-xl) var(--space-2xl);
+  box-shadow: var(--shadow-lg), 0 0 35px var(--accent-glow);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  transform: scale(0.9) translateY(15px);
+  transition: transform var(--transition-bounce);
+}
+
+.admin-modal-overlay.active .admin-modal-card {
+  transform: scale(1) translateY(0);
+}
+
+.admin-modal-close {
+  position: absolute;
+  top: var(--space-md);
+  right: var(--space-md);
+  background: transparent;
+  border: none;
+  color: var(--muted);
+  font-size: 1.6rem;
+  line-height: 1;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.admin-modal-close:hover {
+  color: white;
+  background: rgba(225, 29, 72, 0.2);
+  transform: rotate(90deg);
+}
+
+.admin-modal-header {
+  text-align: center;
+  margin-bottom: var(--space-xl);
+}
+
+.admin-modal-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: var(--space-xs);
+}
+
+.admin-modal-subtitle {
+  color: var(--muted);
+  font-size: 0.875rem;
+}
+
+.admin-modal-error {
+  background: rgba(239, 68, 68, 0.15);
+  border: 1px solid rgba(239, 68, 68, 0.4);
+  color: #f87171;
+  padding: var(--space-sm) var(--space-md);
+  border-radius: var(--radius-md);
+  font-size: 0.85rem;
+  margin-bottom: var(--space-lg);
+  text-align: center;
+  animation: shake 0.4s ease-in-out;
+}
+
+.admin-security-banner {
+  background: rgba(225, 29, 72, 0.2);
+  border: 1px solid var(--accent);
+  color: #fca5a5;
+  padding: var(--space-md);
+  border-radius: var(--radius-md);
+  font-size: 0.9rem;
+  margin-bottom: var(--space-lg);
+  text-align: center;
+  line-height: 1.5;
+  box-shadow: 0 0 15px rgba(225, 29, 72, 0.3);
+  animation: pulseWarning 2s infinite alternate;
+}
+
+.lockout-countdown {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  color: #ffffff;
+  font-size: 1.1rem;
+  letter-spacing: 1px;
+}
+
+@keyframes pulseWarning {
+  0% { border-color: rgba(225, 29, 72, 0.4); box-shadow: 0 0 10px rgba(225, 29, 72, 0.2); }
+  100% { border-color: var(--accent); box-shadow: 0 0 25px rgba(225, 29, 72, 0.6); }
+}
+

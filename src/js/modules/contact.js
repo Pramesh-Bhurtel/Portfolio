@@ -41,6 +41,8 @@ export async function initContactForm() {
         );
         showSuccess('Message sent successfully! I will get back to you soon.', 4000);
         form.reset();
+        // Increment Firebase metrics counter (fire-and-forget, non-blocking)
+        import('./firebaseSync.js').then(m => m.incrementMetric('form_submissions')).catch(() => {});
         // Clear valid states
         const inputs = form.querySelectorAll('input, textarea');
         inputs.forEach(input => clearError(input));
@@ -86,9 +88,7 @@ function loadEmailJS() {
     };
     script.onerror = () => {
       emailjsLoadPromise = null;
-      import('./toast.js').then(module => {
-        module.showError('Email service blocked by browser or network.');
-      });
+      showError('Email service blocked by browser or network.');
       reject(new Error('Failed to load EmailJS'));
     };
     document.head.appendChild(script);

@@ -1,3 +1,8 @@
 User-agent: *
 Allow: /
+
+# Block search engine indexing of the admin panel
+Disallow: /admin-dashboard.html
+Disallow: /admin-dashboard
+
 Sitemap: https://prameshbhurtel.com.np/sitemap.xml

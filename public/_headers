@@ -1,14 +1,13 @@
-# Global security headers for all paths
+# Global security headers — applied to every response
 /*
   X-Content-Type-Options: nosniff
-  X-Frame-Options: DENY
-  Referrer-Policy: strict-origin-when-cross-origin
-  Content-Security-Policy: upgrade-insecure-requests;
-  Permissions-Policy: camera=(), microphone=(), geolocation=()
-  X-XSS-Protection: 1; mode=block
   X-Frame-Options: SAMEORIGIN
+  X-XSS-Protection: 1; mode=block
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=(self)
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://www.gstatic.com https://www.googletagmanager.com https://www.google-analytics.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://*.firebaseio.com https://firebasedatabase.app https://*.asia-southeast1.firebasedatabase.app https://identitytoolkit.googleapis.com https://ipapi.co https://www.google-analytics.com; frame-ancestors 'none';
 
-# Prevent caching of the main pages so new builds update immediately
+# Main pages — no caching so every deployment goes live immediately
 /
   Cache-Control: public, no-cache, must-revalidate
 
@@ -18,9 +17,13 @@
 /404.html
   Cache-Control: public, no-cache, must-revalidate
 
+/admin-dashboard.html
+  Cache-Control: no-store, no-cache, must-revalidate
+  X-Robots-Tag: noindex, nofollow
+
 /manifest.json
   Cache-Control: public, no-cache, must-revalidate
 
-# Permanently cache all Vite hashed static assets (images, js, fonts)
+# Vite hashed static assets — permanently cached (content-addressed filenames)
 /assets/*
   Cache-Control: public, max-age=31536000, immutable

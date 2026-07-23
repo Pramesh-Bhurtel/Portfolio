@@ -210,7 +210,7 @@
                             <div class="sun-core">
                                 <picture>
                                     <source srcset="assets/images/img-400.webp 400w, assets/images/img-800.webp 800w" sizes="(max-width: 480px) 400px, 800px" type="image/webp">
-                                    <img src="assets/images/img-800.webp" alt="Pramesh Bhurtel" width="400" height="400" fetchpriority="high" decoding="sync">
+                                    <img id="profile-img" src="assets/images/img-800.webp" alt="Pramesh Bhurtel" width="400" height="400" fetchpriority="high" decoding="sync">
                                 </picture>
                             </div>
                             <div class="orbit-wrapper random-orbit">
@@ -407,7 +407,7 @@
                                 <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                                     <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
                                 </svg>
-                                <a class="contact-link" href="mailto:contact@prameshbhurtel.com.np">contact@prameshbhurtel.com.np</a>
+                                <a class="contact-link" href="mailto:prameshbhurtel1@gmail.com">prameshbhurtel1@gmail.com</a>
                             </div>
                             <div class="contact-item">
                                 <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
@@ -491,6 +491,34 @@
     </div>
 
 
+
+    <!-- Hidden Admin CMS Login Modal -->
+    <div id="admin-modal" class="admin-modal-overlay" role="dialog" aria-modal="true" aria-labelledby="admin-modal-title" aria-hidden="true">
+        <div class="admin-modal-card">
+            <button id="admin-modal-close" class="admin-modal-close" aria-label="Close modal">&times;</button>
+            <div class="admin-modal-header">
+                <h2 id="admin-modal-title" class="admin-modal-title">Admin CMS Login</h2>
+                <p class="admin-modal-subtitle">Enter your administrative credentials to continue</p>
+            </div>
+            <div id="admin-security-banner" class="admin-security-banner" role="alert" style="display: none;"></div>
+            <div id="admin-error-message" class="admin-modal-error" role="alert" style="display: none;"></div>
+            <form id="admin-login-form" novalidate>
+                <div class="form-group">
+                    <label for="admin-username">Username</label>
+                    <input type="text" id="admin-username" name="username" placeholder="username" autocomplete="username" required>
+                </div>
+                <div class="form-group">
+                    <label for="admin-password">Password</label>
+                    <input type="password" id="admin-password" name="password" placeholder="password" autocomplete="current-password" required>
+                </div>
+                <button type="submit" class="glow-genz-button admin-submit-btn">Login</button>
+                <!-- Honeypot: invisible to humans, catches bots -->
+                <div style="position:absolute;overflow:hidden;clip:rect(0,0,0,0);width:1px;height:1px;margin:-1px;" aria-hidden="true">
+                    <input type="text" id="admin-honeypot" name="website" tabindex="-1" autocomplete="off">
+                </div>
+            </form>
+        </div>
+    </div>
 
     <button id="scroll-top" class="scroll-top" aria-label="Scroll to top">↑</button>
 
