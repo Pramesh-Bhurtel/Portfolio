@@ -1440,17 +1440,20 @@
         // ── Initialise ──────────────────────────────────────────────────
         (async () => {
             setFirebaseStatus('connecting');
-            const telemetry = await getDetailedDeviceTelemetry();
-            logActivity(`Admin CMS session started [${telemetry.os} | ${telemetry.browser} | IP: ${telemetry.ip} | ${telemetry.city}, ${telemetry.country}]`);
-            sendAdminLoginEmailAlert(telemetry);
-            renderLogs();
 
-            // Render from localStorage immediately (zero-latency)
+            // Render from localStorage immediately (zero-latency UI)
             renderProjects(store.projects);
             renderSecurityState();
             await hydrateGlobalConfig();
 
-            // Attempt Firebase connection
+            // Fire telemetry & access alert asynchronously in background (never blocks CMS startup)
+            getDetailedDeviceTelemetry().then((telemetry) => {
+                logActivity(`Admin CMS session started [${telemetry.os} | ${telemetry.browser} | IP: ${telemetry.ip} | ${telemetry.city}, ${telemetry.country}]`);
+                sendAdminLoginEmailAlert(telemetry);
+                renderLogs();
+            }).catch(() => {});
+
+            // Attempt Firebase connection immediately
             const { db } = await initFirebase();
 
             let metricsReceived = false;
