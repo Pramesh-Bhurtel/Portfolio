@@ -78,9 +78,9 @@ export async function initFirebase() {
       'https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js'
     );
 
-    // Prevent duplicate app initialization on hot-reloads
+    // Pass config.databaseURL explicitly so regional database (asia-southeast1) connects properly
     _app = getApps().length ? getApps()[0] : initializeApp(config);
-    _db  = getDatabase(_app);
+    _db  = config.databaseURL ? getDatabase(_app, config.databaseURL) : getDatabase(_app);
 
     console.info('[Firebase] Connected ✓');
     return { app: _app, db: _db };
