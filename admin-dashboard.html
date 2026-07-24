@@ -1451,9 +1451,7 @@
                     applyMetrics(metrics);
                 });
             } else {
-                // Check if it's a missing config vs a real error
-                const { FIREBASE_CONFIG } = await import('./src/js/modules/firebase.js');
-                setFirebaseStatus(FIREBASE_CONFIG.apiKey === 'YOUR_API_KEY' ? 'error' : 'offline');
+                setFirebaseStatus('offline');
                 // Show dashes in metric cards to indicate offline
                 applyMetrics({ total_visits: null, cv_downloads: null, form_submissions: null });
             }
