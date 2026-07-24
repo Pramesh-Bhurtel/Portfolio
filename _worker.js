@@ -16,6 +16,13 @@
  *   FIREBASE_MESSAGING_SENDER_ID, FIREBASE_APP_ID, FIREBASE_MEASUREMENT_ID
  */
 
+// Allowed origins that may fetch /firebase-config.js.
+// Add both apex and www if you use both.
+const ALLOWED_ORIGINS = new Set([
+  'https://prameshbhurtel.com.np',
+  'https://www.prameshbhurtel.com.np',
+]);
+
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
@@ -24,6 +31,21 @@ export default {
     // This endpoint is fetched at runtime by the frontend firebase.js module.
     // Secrets are injected by Cloudflare at runtime — never stored in source code.
     if (url.pathname === '/firebase-config.js') {
+      // Gate: only serve to requests that originate from our own pages.
+      // Browsers send `Origin` on fetch/import(); some send `Referer` instead.
+      // Direct curl/browser-address-bar hits send neither and get rejected.
+      const origin = request.headers.get('Origin');
+      const referer = request.headers.get('Referer');
+      const refererOrigin = referer ? new URL(referer).origin : null;
+
+      const isAllowed =
+        (origin && ALLOWED_ORIGINS.has(origin)) ||
+        (refererOrigin && ALLOWED_ORIGINS.has(refererOrigin));
+
+      if (!isAllowed) {
+        return new Response('Not found', { status: 404 });
+      }
+
       const config = JSON.stringify({
         apiKey:            env.FIREBASE_API_KEY            ?? '',
         authDomain:        env.FIREBASE_AUTH_DOMAIN        ?? '',
