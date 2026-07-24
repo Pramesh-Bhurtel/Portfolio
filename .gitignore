@@ -11,11 +11,14 @@ dist/
 # ── Environment & Secrets ────────────────────────────────────────
 .env
 .env.*
-!.env.example
 .env.local
 .env.production
 .env.staging
 src/js/modules/env.js
+
+# ── Private Hosting Documentation (Local Only — Do NOT Push) ────
+hosting.md
+hosting*.md
 
 # ── Logs ─────────────────────────────────────────────────────────
 *.log
