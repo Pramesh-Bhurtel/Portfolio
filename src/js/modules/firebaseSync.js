@@ -139,10 +139,12 @@ export async function onProjectsChange(callback) {
     return () => {};
   }
 
-  const { ref, onValue, off } = await import('https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js');
+  // Firebase v10 modular: onValue() returns the unsubscribe function directly.
+  // The compat off() API is NOT used in the modular SDK.
+  const { ref, onValue } = await import('https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js');
   const projectsRef = ref(db, `${DB_ROOT}/projects`);
 
-  const unsubscribe = onValue(projectsRef, (snapshot) => {
+  const detach = onValue(projectsRef, (snapshot) => {
     if (snapshot.exists()) {
       const data = snapshot.val();
       const arr = Array.isArray(data) ? data : Object.values(data);
@@ -150,16 +152,14 @@ export async function onProjectsChange(callback) {
       callback(arr);
     } else {
       const local = safeParse(localStorage.getItem(LS_PROJECTS), null);
-      if (local && local.length) {
-        callback(local);
-      }
+      if (local && local.length) callback(local);
     }
   }, (err) => {
     console.error('[Firebase] onProjectsChange error:', err);
     callback(safeParse(localStorage.getItem(LS_PROJECTS), []));
   });
 
-  return () => off(projectsRef, 'value', unsubscribe);
+  return detach; // call detach() to stop listening
 }
 
 /**
@@ -178,14 +178,15 @@ export async function onMetricsChange(callback) {
   const { ref, onValue } = await import('https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js');
   const metricsRef = ref(db, `${DB_ROOT}/metrics`);
 
-  const unsubscribe = onValue(metricsRef, (snapshot) => {
+  // Firebase v10 modular: onValue() returns the unsubscribe/detach function directly.
+  const detach = onValue(metricsRef, (snapshot) => {
     callback(snapshot.exists() ? snapshot.val() : {});
   }, (err) => {
     console.error('[Firebase] onMetricsChange error:', err);
     callback({});
   });
 
-  return () => off(metricsRef, 'value', unsubscribe);
+  return detach; // call detach() to stop listening
 }
 
 /**

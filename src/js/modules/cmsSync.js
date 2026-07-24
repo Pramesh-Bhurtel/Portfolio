@@ -4,6 +4,35 @@ const LS_PROJECTS = 'cms_projects';
 const LS_CONFIG   = 'cms_config';
 
 /**
+ * Escapes unsafe HTML characters to prevent XSS.
+ * Used before inserting any user-controlled content into innerHTML.
+ * @param {*} value
+ * @returns {string} safe escaped string
+ */
+function escHtml(value) {
+  if (value === null || value === undefined) return '';
+  return String(value)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+/**
+ * Validates a URL — ensures it's HTTP/HTTPS only.
+ * Blocks javascript: and data: protocol injection in link hrefs and img src.
+ * @param {string} url
+ * @returns {string} safe URL or empty string
+ */
+function safeUrl(url) {
+  if (!url || typeof url !== 'string') return '';
+  const trimmed = url.trim();
+  if (!/^https?:\/\//i.test(trimmed)) return '';
+  return trimmed;
+}
+
+/**
  * initCmsSync — Portfolio Page Hydration Module
  *
  * Reads CMS data from localStorage (with optional Firebase real-time binding)
@@ -17,8 +46,8 @@ export async function initCmsSync() {
   const projectsRaw = localStorage.getItem(LS_PROJECTS);
   const configRaw   = localStorage.getItem(LS_CONFIG);
 
-  if (configRaw)   applyConfig(JSON.parse(configRaw));
-  if (projectsRaw) applyProjects(JSON.parse(projectsRaw));
+  try { if (configRaw)   applyConfig(JSON.parse(configRaw)); } catch {}
+  try { if (projectsRaw) applyProjects(JSON.parse(projectsRaw)); } catch {}
 
   // Attempt Firebase real-time upgrade (lazy, non-blocking)
   try {
@@ -49,7 +78,7 @@ export async function initCmsSync() {
         }
       });
     }
-  } catch (err) {
+  } catch {
     // Firebase unavailable — localStorage hydration already applied above
     console.info('[CmsSync] Running in offline mode (localStorage only).');
   }
@@ -66,6 +95,7 @@ function applyConfig(config) {
     facebookUrl, instagramUrl, githubUrl, linkedinUrl
   } = config;
 
+  // Use textContent for all text fields — never innerHTML with user data
   const greetingEl = $('.greeting');
   if (greetingEl && heroGreeting) greetingEl.textContent = heroGreeting;
 
@@ -78,17 +108,18 @@ function applyConfig(config) {
   if (Array.isArray(skills) && skills.length) {
     const skillsGrid = $('.skills-grid');
     if (skillsGrid) {
+      // Escape each skill tag to prevent XSS via admin-injected skill names
       skillsGrid.innerHTML = skills
-        .map(s => `<span class="skill-tag">${s}</span>`)
+        .map(s => `<span class="skill-tag">${escHtml(s)}</span>`)
         .join('');
     }
   }
 
-  // Update Contact Details on Live Site
+  // Update Contact Details — use textContent for display, safe href for links
   if (contactEmail) {
     const emailLink = document.querySelector('a.contact-link[href^="mailto:"]');
     if (emailLink) {
-      emailLink.href = `mailto:${contactEmail}`;
+      emailLink.href = `mailto:${encodeURIComponent(contactEmail)}`;
       emailLink.textContent = contactEmail;
     }
   }
@@ -102,29 +133,22 @@ function applyConfig(config) {
   }
 
   if (contactLocation) {
-    const locationLink = document.querySelector('a.contact-link[href*="maps"]');
-    if (locationLink) {
-      locationLink.textContent = contactLocation;
-    }
+    const locationEl = document.querySelector('a.contact-link[href*="maps"]');
+    if (locationEl) locationEl.textContent = contactLocation;
   }
 
-  // Update Social Media Links on Live Site
-  if (facebookUrl) {
-    const fb = document.querySelector('.social-links a[aria-label="Facebook"]');
-    if (fb) fb.href = facebookUrl;
-  }
-  if (instagramUrl) {
-    const ig = document.querySelector('.social-links a[aria-label="Instagram"]');
-    if (ig) ig.href = instagramUrl;
-  }
-  if (githubUrl) {
-    const gh = document.querySelector('.social-links a[aria-label="GitHub"]');
-    if (gh) gh.href = githubUrl;
-  }
-  if (linkedinUrl) {
-    const li = document.querySelector('.social-links a[aria-label="LinkedIn"]');
-    if (li) li.href = linkedinUrl;
-  }
+  // Update Social Media Links — validate before setting href
+  const socials = [
+    ['.social-links a[aria-label="Facebook"]',  facebookUrl],
+    ['.social-links a[aria-label="Instagram"]', instagramUrl],
+    ['.social-links a[aria-label="GitHub"]',    githubUrl],
+    ['.social-links a[aria-label="LinkedIn"]',  linkedinUrl],
+  ];
+  socials.forEach(([selector, url]) => {
+    const el = document.querySelector(selector);
+    const safe = safeUrl(url);
+    if (el && safe) el.href = safe;
+  });
 }
 
 function applyProjects(projects) {
@@ -140,18 +164,24 @@ function applyProjects(projects) {
     const article = document.createElement('article');
     article.className = 'project-card revealed';
 
-    const links = buildLinks(project);
-    const techTags = (project.tech || []).map(t => `<span>${t}</span>`).join('');
+    const links    = buildLinks(project);
+    const techTags = (project.tech || [])
+      .map(t => `<span>${escHtml(t)}</span>`)
+      .join('');
 
+    // Sanitize all user-supplied values before inserting into HTML
+    const imgSrc = safeUrl(project.image) || '';
+
+    // Build card DOM via innerHTML with all values properly escaped
     article.innerHTML = `
       <div class="project-image">
-        <img src="${project.image}" alt="${project.title}"
+        <img src="${escHtml(imgSrc)}" alt="${escHtml(project.title)}"
              width="600" height="400" loading="lazy" decoding="async"
-             onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\\'http://www.w3.org/2000/svg\\' width=\\'100\\' height=\\'100\\'><rect fill=\\'%23171717\\' width=\\'100\\' height=\\'100\\'/><text fill=\\'%23e11d48\\' font-family=\\'sans-serif\\' font-size=\\'12\\' x=\\'50%\\' y=\\'50%\\' text-anchor=\\'middle\\'>Image</text></svg>'">
+             onerror="this.onerror=null;this.src='data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%22100%22><rect fill=%22%23171717%22 width=%22100%22 height=%22100%22/><text fill=%22%23e11d48%22 font-size=%2212%22 x=%2250%25%22 y=%2250%25%22 text-anchor=%22middle%22 dominant-baseline=%22middle%22>No Image</text></svg>'">
       </div>
       <div class="project-content">
-        <h3>${project.title}</h3>
-        <p>${project.desc}</p>
+        <h3>${escHtml(project.title)}</h3>
+        <p>${escHtml(project.desc)}</p>
         <div class="project-tech">${techTags}</div>
         <div class="project-links">${links}</div>
       </div>
@@ -168,9 +198,12 @@ function buildLinks(project) {
   const links = [];
 
   const add = (url, label) => {
-    if (url) links.push(
-      `<a href="${url}" class="project-link" target="_blank" rel="noopener noreferrer">${label}</a>`
-    );
+    const safe = safeUrl(url);
+    if (safe) {
+      links.push(
+        `<a href="${escHtml(safe)}" class="project-link" target="_blank" rel="noopener noreferrer">${escHtml(label)}</a>`
+      );
+    }
   };
 
   // Preset platform links
@@ -183,18 +216,12 @@ function buildLinks(project) {
   // Multiple Custom Action Buttons (array of { label, url })
   if (Array.isArray(project.customLinks) && project.customLinks.length > 0) {
     project.customLinks.forEach(link => {
-      if (link.label && link.url) {
-        add(link.url, link.label);
-      }
+      if (link.label && link.url) add(link.url, link.label);
     });
   } else {
-    // Legacy fallback for single custom link or demoUrl
-    if (project.customLabel && project.customUrl) {
-      add(project.customUrl, project.customLabel);
-    }
-    if (project.demoUrl) {
-      add(project.demoUrl, 'Live Demo');
-    }
+    // Legacy fallback
+    if (project.customLabel && project.customUrl) add(project.customUrl, project.customLabel);
+    if (project.demoUrl) add(project.demoUrl, 'Live Demo');
   }
 
   return links.join('');

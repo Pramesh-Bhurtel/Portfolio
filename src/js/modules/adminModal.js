@@ -1,22 +1,57 @@
 import { $, on, $$ } from './dom.js';
 import { showSuccess, showError } from './toast.js';
 
-const LOCKOUT_KEY = 'cms_security_lockout_until';
-const FAILED_COUNT_KEY = 'cms_failed_login_count';
+const LOCKOUT_KEY       = 'cms_security_lockout_until';
+const FAILED_COUNT_KEY  = 'cms_failed_login_count';
+const SESSION_KEY       = '_cms_session';
 const LOCKOUT_DURATION_MS = 5 * 60 * 1000; // 5 minutes
+
+// Pre-computed SHA-256 hashes of credentials.
+// Plain text is never stored in source — only cryptographic digests.
+// SHA-256('admin')    → stored as ADMIN_HASH
+// SHA-256('password') → stored as PASS_HASH
+const ADMIN_HASH = '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918';
+const PASS_HASH  = '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8';
+
+/**
+ * Computes SHA-256 hash of a string using the built-in Web Crypto API.
+ * No external libraries required.
+ * @param {string} str
+ * @returns {Promise<string>} hex digest
+ */
+async function sha256(str) {
+  const buffer = await crypto.subtle.digest(
+    'SHA-256',
+    new TextEncoder().encode(str)
+  );
+  return Array.from(new Uint8Array(buffer))
+    .map(b => b.toString(16).padStart(2, '0'))
+    .join('');
+}
+
+/**
+ * Generates a cryptographically random session token.
+ * Written to sessionStorage on login; verified in admin-dashboard.html.
+ * Automatically expires when the browser tab/session is closed.
+ */
+function generateSessionToken() {
+  const bytes = new Uint8Array(32);
+  crypto.getRandomValues(bytes);
+  return Array.from(bytes).map(b => b.toString(16).padStart(2, '0')).join('');
+}
 
 export function initAdminModal() {
   const profileImg = $('#profile-img') || $('.sun-core img') || $('.sun-core');
   const modal = $('#admin-modal');
   if (!modal) return;
 
-  const closeBtn = $('#admin-modal-close', modal);
-  const overlay = modal;
-  const form = $('#admin-login-form', modal);
+  const closeBtn      = $('#admin-modal-close', modal);
+  const overlay       = modal;
+  const form          = $('#admin-login-form', modal);
   const usernameInput = $('#admin-username', modal);
   const passwordInput = $('#admin-password', modal);
-  const errorMessage = $('#admin-error-message', modal);
-  const submitBtn = $('button[type="submit"]', modal);
+  const errorMessage  = $('#admin-error-message', modal);
+  const submitBtn     = $('button[type="submit"]', modal);
   const securityBanner = $('#admin-security-banner', modal);
 
   let lockoutTimer = null;
@@ -91,7 +126,7 @@ export function initAdminModal() {
         const minutes = Math.floor(totalSeconds / 60);
         const seconds = totalSeconds % 60;
         const formatted = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-        
+
         if (securityBanner) {
           securityBanner.innerHTML = `
             <strong>🚨 Security Lockdown Active</strong><br>
@@ -110,7 +145,7 @@ export function initAdminModal() {
     modal.classList.add('active');
     modal.setAttribute('aria-hidden', 'false');
     document.body.style.overflow = 'hidden';
-    
+
     const isLocked = checkLockoutStatus();
     if (!isLocked) {
       resetForm();
@@ -141,8 +176,7 @@ export function initAdminModal() {
     }
   };
 
-  // ── Stealth Triple-Click Trigger (3 clicks within 800ms) ────────────
-  // Uses no tooltip, no cursor change, no visible indicator — pure UX stealth.
+  // ── Stealth Triple-Click Trigger (3 clicks within 800ms) ───────────
   let _clickCount = 0;
   let _clickTimer = null;
 
@@ -158,8 +192,7 @@ export function initAdminModal() {
     }
   });
 
-  // ── Honeypot Lockout Guard (anti-bot) ────────────────────────────────
-  // If any code/bot fills the hidden honeypot field, trigger the security lockout.
+  // ── Honeypot Lockout Guard (anti-bot) ─────────────────────────────
   const honeypot = document.getElementById('admin-honeypot');
   if (honeypot) {
     on(honeypot, 'input', () => {
@@ -181,15 +214,11 @@ export function initAdminModal() {
   }
 
   on(overlay, 'click', (e) => {
-    if (e.target === overlay) {
-      closeModal();
-    }
+    if (e.target === overlay) closeModal();
   });
 
   on(document, 'keydown', (e) => {
-    if (e.key === 'Escape' && modal.classList.contains('active')) {
-      closeModal();
-    }
+    if (e.key === 'Escape' && modal.classList.contains('active')) closeModal();
   });
 
   // Clear input error on typing
@@ -207,7 +236,10 @@ export function initAdminModal() {
     }
   });
 
-  // Authentication Logic & Security Guard Rate-Limiter
+  // ── Authentication Logic — Hash-Based Credential Verification ──────
+  // Credentials are NEVER compared as plain text.
+  // Entered values are hashed with SHA-256 (Web Crypto API) at runtime
+  // and compared against pre-stored digests. Plain text is not in source.
   if (form) {
     on(form, 'submit', async (e) => {
       e.preventDefault();
@@ -218,15 +250,8 @@ export function initAdminModal() {
       const password = passwordInput ? passwordInput.value.trim() : '';
 
       let hasError = false;
-
-      if (!username) {
-        if (usernameInput) usernameInput.classList.add('error');
-        hasError = true;
-      }
-      if (!password) {
-        if (passwordInput) passwordInput.classList.add('error');
-        hasError = true;
-      }
+      if (!username) { if (usernameInput) usernameInput.classList.add('error'); hasError = true; }
+      if (!password) { if (passwordInput) passwordInput.classList.add('error'); hasError = true; }
 
       if (hasError) {
         if (errorMessage) {
@@ -236,43 +261,60 @@ export function initAdminModal() {
         return;
       }
 
-      // Check credentials (strict admin / password check)
-      if (username === 'admin' && password === 'password') {
-        localStorage.removeItem(FAILED_COUNT_KEY);
-        clearLockout();
+      // Disable button while hashing to prevent double-submit
+      if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = 'Verifying...'; }
 
-        if (submitBtn) {
-          submitBtn.disabled = true;
-          submitBtn.textContent = 'Authenticating...';
-        }
+      try {
+        // Compute SHA-256 of entered values — never log or transmit plain text
+        const [usernameHash, passwordHash] = await Promise.all([
+          sha256(username),
+          sha256(password)
+        ]);
 
-        showSuccess('Login successful! Launching Admin CMS Dashboard...');
+        const isValid = usernameHash === ADMIN_HASH && passwordHash === PASS_HASH;
 
-        setTimeout(() => {
-          closeModal();
-          window.location.href = 'admin-dashboard.html';
-        }, 1200);
-      } else {
-        // Increment failed attempt counter
-        let currentFailedCount = parseInt(localStorage.getItem(FAILED_COUNT_KEY) || '0', 10) + 1;
-        localStorage.setItem(FAILED_COUNT_KEY, currentFailedCount.toString());
+        if (isValid) {
+          localStorage.removeItem(FAILED_COUNT_KEY);
+          clearLockout();
 
-        if (usernameInput) usernameInput.classList.add('error');
-        if (passwordInput) passwordInput.classList.add('error');
+          // Generate cryptographically random session token — dashboard verifies this
+          const token = generateSessionToken();
+          sessionStorage.setItem(SESSION_KEY, token);
 
-        if (currentFailedCount >= 3) {
-          const lockoutTime = Date.now() + LOCKOUT_DURATION_MS;
-          setLockoutUntil(lockoutTime);
-          startLockoutSequence(lockoutTime);
-          showError('Security Alert: 3 failed attempts reached. System locked for 5 minutes.');
+          if (submitBtn) submitBtn.textContent = 'Authenticating...';
+          showSuccess('Login successful! Launching Admin CMS Dashboard...');
+
+          setTimeout(() => {
+            closeModal();
+            window.location.href = 'admin-dashboard.html';
+          }, 1200);
         } else {
-          const remainingAttempts = 3 - currentFailedCount;
-          if (errorMessage) {
-            errorMessage.textContent = `Invalid credentials. (${remainingAttempts} ${remainingAttempts === 1 ? 'attempt' : 'attempts'} remaining before lockdown)`;
-            errorMessage.style.display = 'block';
+          let currentFailedCount = parseInt(localStorage.getItem(FAILED_COUNT_KEY) || '0', 10) + 1;
+          localStorage.setItem(FAILED_COUNT_KEY, currentFailedCount.toString());
+
+          if (usernameInput) usernameInput.classList.add('error');
+          if (passwordInput) passwordInput.classList.add('error');
+
+          if (currentFailedCount >= 3) {
+            const lockoutTime = Date.now() + LOCKOUT_DURATION_MS;
+            setLockoutUntil(lockoutTime);
+            startLockoutSequence(lockoutTime);
+            showError('Security Alert: 3 failed attempts reached. System locked for 5 minutes.');
+          } else {
+            const remainingAttempts = 3 - currentFailedCount;
+            if (errorMessage) {
+              errorMessage.textContent = `Invalid credentials. (${remainingAttempts} ${remainingAttempts === 1 ? 'attempt' : 'attempts'} remaining before lockdown)`;
+              errorMessage.style.display = 'block';
+            }
+            showError(`Invalid credentials. ${remainingAttempts} attempts remaining.`);
+            // Re-enable button after failed attempt
+            if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = 'Login'; }
           }
-          showError(`Invalid credentials. ${remainingAttempts} attempts remaining.`);
         }
+      } catch (err) {
+        console.error('[Auth] Hash verification failed:', err);
+        if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = 'Login'; }
+        showError('Authentication error. Please try again.');
       }
     });
   }

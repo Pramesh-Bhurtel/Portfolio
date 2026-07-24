@@ -56,8 +56,10 @@ document.addEventListener('error', function(e) {
   }
 }, true); // Use capture phase to catch network errors
 
-// Fallback for unexpected global errors
+// Suppress unhandled promise rejections from console UI leakage.
+// Firebase and network errors are gracefully handled within each module.
+// Log to console only — never surface as user-facing toast errors.
 window.addEventListener('unhandledrejection', (event) => {
-  console.error('Unhandled promise rejection:', event.reason);
-  showError('Something went wrong. Please try again later.');
+  console.warn('[Unhandled rejection]', event.reason);
+  event.preventDefault(); // suppress browser console noise
 });

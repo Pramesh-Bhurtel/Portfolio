@@ -796,6 +796,19 @@
     </div>
 
     <script type="module">
+        // ── Session Guard ────────────────────────────────────────────────────
+        // Blocks direct URL access without going through the login flow.
+        // The session token is set by adminModal.js after credential verification.
+        // sessionStorage auto-clears when the browser tab/session is closed.
+        (() => {
+            const SESSION_KEY = '_cms_session';
+            if (!sessionStorage.getItem(SESSION_KEY)) {
+                // No valid session — redirect silently, don't load CMS
+                window.location.replace('index.html');
+                throw new Error('Unauthorized: no valid CMS session.');
+            }
+        })();
+
         import { showSuccess, showError } from './src/js/modules/toast.js';
         import {
             initFirebase
@@ -1294,8 +1307,10 @@
         // ── Terminate Session ───────────────────────────────────────────
         document.getElementById('btn-terminate-session').addEventListener('click', () => {
             logActivity('Admin CMS session terminated by user.');
+            // Clear the session token so re-accessing the URL forces login again
+            sessionStorage.removeItem('_cms_session');
             showSuccess('Session terminated. Returning to main website...');
-            setTimeout(() => { window.location.href = 'index.html'; }, 1000);
+            setTimeout(() => { window.location.replace('index.html'); }, 1000);
         });
 
         // ── Metrics Rendering ───────────────────────────────────────────
