@@ -12,7 +12,11 @@ export default defineConfig({
         main: './index.html',
         notFound: './404.html',
         adminDashboard: './admin-dashboard.html'
-      }
+      },
+      // /firebase-config.js is served at runtime by the Cloudflare Worker.
+      // It must NOT be bundled — mark it as external so Vite leaves the
+      // dynamic import('/firebase-config.js') call intact in the output.
+      external: ['/firebase-config.js'],
     }
   },
   plugins: [

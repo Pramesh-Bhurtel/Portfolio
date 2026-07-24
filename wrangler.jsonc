@@ -1,13 +1,38 @@
 {
   "name": "portfolio",
   "compatibility_date": "2026-04-23",
+
+  // Entry point: Worker script that handles /firebase-config.js and falls
+  // through to static assets for everything else.
+  "main": "./_worker.js",
+
   "observability": {
     "enabled": true
   },
+
+  // Static assets served from the Vite production build output.
+  // Bound as env.ASSETS so the Worker can proxy requests to it.
   "assets": {
-    "directory": "dist"
+    "directory": "dist",
+    "binding": "ASSETS"
   },
+
   "compatibility_flags": [
     "nodejs_compat"
   ]
+
+  // ── Secrets ─────────────────────────────────────────────────────────
+  // DO NOT add Firebase credentials here — use encrypted Worker Secrets instead.
+  // Set them in: Cloudflare Dashboard → Workers & Pages → portfolio
+  //              → Settings → Variables and Secrets → Add Secret
+  //
+  // Required secrets:
+  //   FIREBASE_API_KEY
+  //   FIREBASE_AUTH_DOMAIN
+  //   FIREBASE_DATABASE_URL
+  //   FIREBASE_PROJECT_ID
+  //   FIREBASE_STORAGE_BUCKET
+  //   FIREBASE_MESSAGING_SENDER_ID
+  //   FIREBASE_APP_ID
+  //   FIREBASE_MEASUREMENT_ID
 }
