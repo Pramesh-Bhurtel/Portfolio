@@ -510,14 +510,19 @@
             <div class="cms-brand">
                 <div class="cms-logo">Pramesh<span>CMS</span></div>
                 <span class="cms-badge" id="firebase-status-badge">⏳ Connecting...</span>
+                <span class="cms-badge" id="firebase-ping-badge" style="background: rgba(59,130,246,0.15); border: 1px solid rgba(59,130,246,0.3); color: #60a5fa; font-family: var(--font-mono); font-size: 0.75rem; display: none;">⚡ --ms</span>
             </div>
             <div class="cms-nav-actions">
                 <a href="index.html" target="_blank" class="cms-btn-sm">
                     👁 Live Website
                 </a>
-                <button id="btn-export-data" class="cms-btn-sm">
+                <button id="btn-export-data" class="cms-btn-sm" title="Export full CMS data backup as JSON file">
                     💾 Export Backup
                 </button>
+                <button id="btn-import-data" class="cms-btn-sm" title="Import & restore CMS data from JSON backup file">
+                    📥 Import Backup
+                </button>
+                <input type="file" id="input-import-backup" accept=".json" style="display: none;">
                 <button id="btn-reset-data" class="cms-btn-sm cms-btn-danger">
                     🔄 Reset Factory
                 </button>
@@ -610,6 +615,14 @@
                         <button id="btn-add-project" class="cms-btn-sm cms-btn-primary">
                             + Add New Project
                         </button>
+                    </div>
+
+                    <!-- Live Filter & Stat Counters -->
+                    <div style="display: flex; gap: 12px; align-items: center; justify-content: space-between; flex-wrap: wrap; margin-bottom: 20px; background: rgba(255,255,255,0.02); padding: 12px 16px; border-radius: 12px; border: var(--glass-rim);">
+                        <input type="search" id="project-search-input" placeholder="🔍 Filter projects by title, description, or tech..." style="flex: 1; min-width: 250px; padding: 8px 14px; background: rgba(0,0,0,0.3); border: var(--glass-rim); border-radius: 8px; color: var(--text); font-size: 0.9rem;">
+                        <div id="project-stats-pills" style="display: flex; gap: 8px; font-size: 0.8rem; font-weight: 500;">
+                            <!-- Dynamic stats pills -->
+                        </div>
                     </div>
 
                     <div id="projects-cms-container" class="project-cms-grid">
@@ -744,6 +757,17 @@
                 <div class="form-group">
                     <label for="project-tech-input">Tech Stack (comma separated)</label>
                     <input type="text" id="project-tech-input" placeholder="HTML, CSS, JavaScript, React">
+                    <div style="display: flex; gap: 6px; flex-wrap: wrap; margin-top: 6px;" id="quick-tech-chips">
+                        <span class="skill-tag tech-chip" style="cursor: pointer; font-size: 0.75rem; padding: 2px 8px;">+ HTML5</span>
+                        <span class="skill-tag tech-chip" style="cursor: pointer; font-size: 0.75rem; padding: 2px 8px;">+ CSS3</span>
+                        <span class="skill-tag tech-chip" style="cursor: pointer; font-size: 0.75rem; padding: 2px 8px;">+ JavaScript</span>
+                        <span class="skill-tag tech-chip" style="cursor: pointer; font-size: 0.75rem; padding: 2px 8px;">+ React</span>
+                        <span class="skill-tag tech-chip" style="cursor: pointer; font-size: 0.75rem; padding: 2px 8px;">+ Node.js</span>
+                        <span class="skill-tag tech-chip" style="cursor: pointer; font-size: 0.75rem; padding: 2px 8px;">+ Python</span>
+                        <span class="skill-tag tech-chip" style="cursor: pointer; font-size: 0.75rem; padding: 2px 8px;">+ Firebase</span>
+                        <span class="skill-tag tech-chip" style="cursor: pointer; font-size: 0.75rem; padding: 2px 8px;">+ HTML5 Canvas</span>
+                        <span class="skill-tag tech-chip" style="cursor: pointer; font-size: 0.75rem; padding: 2px 8px;">+ Tailwind</span>
+                    </div>
                 </div>
 
                 <!-- Dedicated Preset Links -->
@@ -1001,20 +1025,76 @@
             });
         });
 
+        // ── Tech Chips Quick Selector ───────────────────────────────────
+        const techInput = document.getElementById('project-tech-input');
+        const chipsContainer = document.getElementById('quick-tech-chips');
+        if (chipsContainer && techInput) {
+            chipsContainer.addEventListener('click', (e) => {
+                const chip = e.target.closest('.tech-chip');
+                if (!chip) return;
+                const techName = chip.textContent.replace(/^\+\s*/, '').trim();
+                const current = techInput.value.split(',').map(t => t.trim()).filter(Boolean);
+                if (!current.includes(techName)) {
+                    current.push(techName);
+                    techInput.value = current.join(', ');
+                }
+            });
+        }
+
+        // ── Search & Stats Counter Filter ────────────────────────────────
+        const searchInput = document.getElementById('project-search-input');
+        if (searchInput) {
+            searchInput.addEventListener('input', () => {
+                renderProjects(store.projects);
+            });
+        }
+
+        function updateProjectStats(projects) {
+            const pillsEl = document.getElementById('project-stats-pills');
+            if (!pillsEl) return;
+
+            let totalCustomLinks = 0;
+            const uniqueTech = new Set();
+
+            projects.forEach(p => {
+                if (Array.isArray(p.customLinks)) totalCustomLinks += p.customLinks.length;
+                else if (p.customUrl || p.demoUrl) totalCustomLinks += 1;
+
+                if (Array.isArray(p.tech)) {
+                    p.tech.forEach(t => uniqueTech.add(t.trim()));
+                }
+            });
+
+            pillsEl.innerHTML = `
+                <span class="cms-badge" style="background:rgba(59,130,246,0.12);border:1px solid rgba(59,130,246,0.3);color:#60a5fa;">📦 ${projects.length} Projects</span>
+                <span class="cms-badge" style="background:rgba(168,85,247,0.12);border:1px solid rgba(168,85,247,0.3);color:#c084fc;">🔗 ${totalCustomLinks} Action Buttons</span>
+                <span class="cms-badge" style="background:rgba(34,197,94,0.12);border:1px solid rgba(34,197,94,0.3);color:#4ade80;">🏷️ ${uniqueTech.size} Tech Tags</span>
+            `;
+        }
+
         // ── Project Card Renderer (DocumentFragment) ────────────────────
         function renderProjects(projects) {
             store.projects = projects;
             LS.saveProjects(projects); // always keep localStorage in sync
+            updateProjectStats(projects);
+
+            const query = searchInput ? searchInput.value.toLowerCase().trim() : '';
+            const filteredProjects = query ? projects.filter(p => {
+                const titleMatch = (p.title || '').toLowerCase().includes(query);
+                const descMatch  = (p.desc || '').toLowerCase().includes(query);
+                const techMatch  = Array.isArray(p.tech) && p.tech.some(t => t.toLowerCase().includes(query));
+                return titleMatch || descMatch || techMatch;
+            }) : projects;
 
             const frag = document.createDocumentFragment();
-            projects.forEach((proj, index) => {
+            filteredProjects.forEach((proj, index) => {
                 const links = [];
                 if (proj.githubUrl)   links.push('GitHub');
                 if (proj.facebookUrl) links.push('Facebook');
                 if (proj.instagramUrl)links.push('Instagram');
                 if (proj.tiktokUrl)   links.push('TikTok');
                 if (proj.youtubeUrl)  links.push('YouTube');
-                
+
                 if (Array.isArray(proj.customLinks)) {
                     proj.customLinks.forEach(l => { if (l.label) links.push(l.label); });
                 } else {
@@ -1175,11 +1255,11 @@
             if (id) {
                 const i = projects.findIndex(p => p.id === id);
                 if (i > -1) projects[i] = { ...projects[i], ...newData };
-                logActivity(`Updated project "${title}".`);
+                logActivity(`Updated project "${title}".`, 'UPDATE');
                 showSuccess('Project updated — syncing to Firebase...');
             } else {
                 projects.push({ id: Date.now().toString(), ...newData });
-                logActivity(`Created project "${title}".`);
+                logActivity(`Created project "${title}".`, 'CREATE');
                 showSuccess('Project created — syncing to Firebase...');
             }
 
@@ -1233,14 +1313,45 @@
 
             LS.saveConfig(store.config);
             const saved = await saveConfig(store.config);
-            logActivity('Saved Global Configurations (Hero, Bio, Skills, Contact Info, Social Links).');
+            logActivity('Saved Global Configurations (Hero, Bio, Skills, Contact Info, Social Links).', 'CONFIG');
             showSuccess(saved ? 'Config saved to Firebase ✓' : 'Config saved locally (Firebase offline)');
         });
 
-        // ── Activity Log ────────────────────────────────────────────────
-        function logActivity(text) {
-            store.logs.unshift({ time: new Date().toLocaleString(), text });
-            if (store.logs.length > 30) store.logs.pop();
+        // ── Activity Log with Category Badges & ISO Date Timestamps ──
+        function formatDateFormatted(d = new Date()) {
+            const pad = n => String(n).padStart(2, '0');
+            const YYYY = d.getFullYear();
+            const MM = pad(d.getMonth() + 1);
+            const DD = pad(d.getDate());
+            let hours = d.getHours();
+            const minutes = pad(d.getMinutes());
+            const seconds = pad(d.getSeconds());
+            const ampm = hours >= 12 ? 'PM' : 'AM';
+            hours = hours % 12 || 12;
+            return `${YYYY}-${MM}-${DD} ${pad(hours)}:${minutes}:${seconds} ${ampm}`;
+        }
+
+        function logActivity(text, category = 'UPDATE') {
+            const badgeMap = {
+                CREATE: { label: 'CREATE', bg: 'rgba(34,197,94,0.2)', border: 'rgba(34,197,94,0.4)', color: '#4ade80' },
+                UPDATE: { label: 'UPDATE', bg: 'rgba(59,130,246,0.2)', border: 'rgba(59,130,246,0.4)', color: '#60a5fa' },
+                DELETE: { label: 'DELETE', bg: 'rgba(239,68,68,0.2)', border: 'rgba(239,68,68,0.4)', color: '#f87171' },
+                CONFIG: { label: 'CONFIG', bg: 'rgba(168,85,247,0.2)', border: 'rgba(168,85,247,0.4)', color: '#c084fc' },
+                LOGIN:  { label: 'LOGIN',  bg: 'rgba(234,179,8,0.2)',  border: 'rgba(234,179,8,0.4)',  color: '#facc15' },
+                BACKUP: { label: 'BACKUP', bg: 'rgba(6,182,212,0.2)',  border: 'rgba(6,182,212,0.4)',  color: '#22d3ee' },
+                RESTORE:{ label: 'RESTORE',bg: 'rgba(249,115,22,0.2)', border: 'rgba(249,115,22,0.4)', color: '#fb923c' },
+            };
+
+            const cat = badgeMap[category] ? category : 'UPDATE';
+            const logEntry = {
+                time: formatDateFormatted(),
+                iso: new Date().toISOString(),
+                category: cat,
+                text: text
+            };
+
+            store.logs.unshift(logEntry);
+            if (store.logs.length > 50) store.logs.pop();
             LS.saveLogs(store.logs);
             renderLogs();
         }
@@ -1248,12 +1359,29 @@
         function renderLogs() {
             const list = document.getElementById('activity-log-list');
             if (!list) return;
-            list.innerHTML = store.logs.map(l => `
-                <li style="padding:12px;background:rgba(255,255,255,0.03);border-radius:8px;font-size:.85rem;border:var(--glass-rim);">
-                    <span style="color:var(--accent);font-family:var(--font-mono);margin-right:10px;">[${l.time}]</span>
-                    <span>${l.text}</span>
-                </li>
-            `).join('');
+
+            const badgeMap = {
+                CREATE: { bg: 'rgba(34,197,94,0.2)', border: 'rgba(34,197,94,0.4)', color: '#4ade80' },
+                UPDATE: { bg: 'rgba(59,130,246,0.2)', border: 'rgba(59,130,246,0.4)', color: '#60a5fa' },
+                DELETE: { bg: 'rgba(239,68,68,0.2)', border: 'rgba(239,68,68,0.4)', color: '#f87171' },
+                CONFIG: { bg: 'rgba(168,85,247,0.2)', border: 'rgba(168,85,247,0.4)', color: '#c084fc' },
+                LOGIN:  { bg: 'rgba(234,179,8,0.2)',  border: 'rgba(234,179,8,0.4)',  color: '#facc15' },
+                BACKUP: { bg: 'rgba(6,182,212,0.2)',  border: 'rgba(6,182,212,0.4)',  color: '#22d3ee' },
+                RESTORE:{ bg: 'rgba(249,115,22,0.2)', border: 'rgba(249,115,22,0.4)', color: '#fb923c' },
+            };
+
+            list.innerHTML = store.logs.map(l => {
+                const cat = l.category || 'UPDATE';
+                const b = badgeMap[cat] || badgeMap.UPDATE;
+                const timeStr = l.time || (l.iso ? formatDateFormatted(new Date(l.iso)) : 'Unknown Time');
+                return `
+                    <li style="padding:12px 14px;background:rgba(255,255,255,0.03);border-radius:10px;font-size:.85rem;border:var(--glass-rim);display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+                        <span style="background:${b.bg};border:1px solid ${b.border};color:${b.color};padding:2px 8px;border-radius:6px;font-size:0.7rem;font-weight:700;font-family:var(--font-mono);letter-spacing:0.5px;">${cat}</span>
+                        <span style="color:var(--muted);font-family:var(--font-mono);font-size:0.8rem;">📅 ${timeStr}</span>
+                        <span style="flex:1;color:var(--text);">${l.text}</span>
+                    </li>
+                `;
+            }).join('');
         }
 
         document.getElementById('btn-clear-log').addEventListener('click', () => {
@@ -1263,16 +1391,57 @@
             showSuccess('Activity log cleared');
         });
 
-        // ── Export & Reset ──────────────────────────────────────────────
-        document.getElementById('btn-export-data').addEventListener('click', () => {
-            const dataStr = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(store, null, 2));
-            const a = document.createElement('a');
-            a.href = dataStr;
-            a.download = 'portfolio_cms_backup.json';
-            a.click();
-            logActivity('Exported CMS backup.');
-            showSuccess('Backup exported successfully!');
-        });
+        // ── Backup Import & Export ─────────────────────────────────────────
+        const btnExport = document.getElementById('btn-export-data');
+        const btnImport = document.getElementById('btn-import-data');
+        const inputImport = document.getElementById('input-import-backup');
+
+        if (btnExport) {
+            btnExport.addEventListener('click', () => {
+                const dataStr = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(store, null, 2));
+                const a = document.createElement('a');
+                a.href = dataStr;
+                a.download = `portfolio_cms_backup_${new Date().toISOString().split('T')[0]}.json`;
+                a.click();
+                logActivity('Exported CMS data backup file.', 'BACKUP');
+                showSuccess('Backup exported successfully!');
+            });
+        }
+
+        if (btnImport && inputImport) {
+            btnImport.addEventListener('click', () => inputImport.click());
+            inputImport.addEventListener('change', async (e) => {
+                const file = e.target.files[0];
+                if (!file) return;
+
+                try {
+                    const text = await file.text();
+                    const imported = JSON.parse(text);
+
+                    if (imported.projects && Array.isArray(imported.projects)) {
+                        store.projects = imported.projects;
+                        LS.saveProjects(store.projects);
+                        await saveProjects(store.projects);
+                        renderProjects(store.projects);
+                    }
+
+                    if (imported.config && typeof imported.config === 'object') {
+                        store.config = imported.config;
+                        LS.saveConfig(store.config);
+                        await saveConfig(store.config);
+                        await hydrateGlobalConfig();
+                    }
+
+                    logActivity(`Imported CMS backup from file (${file.name}).`, 'RESTORE');
+                    showSuccess('Backup data imported and restored successfully!');
+                } catch (err) {
+                    showError('Failed to parse backup JSON file.');
+                    console.error('[CMS Backup Import]', err);
+                } finally {
+                    inputImport.value = '';
+                }
+            });
+        }
 
         document.getElementById('btn-reset-data').addEventListener('click', async () => {
             if (confirm('Reset ALL CMS data back to factory defaults? This cannot be undone.')) {
@@ -1448,7 +1617,7 @@
 
             // Fire telemetry & access alert asynchronously in background (never blocks CMS startup)
             getDetailedDeviceTelemetry().then((telemetry) => {
-                logActivity(`Admin CMS session started [${telemetry.os} | ${telemetry.browser} | IP: ${telemetry.ip} | ${telemetry.city}, ${telemetry.country}]`);
+                logActivity(`Admin CMS session started [${telemetry.os} | ${telemetry.browser} | IP: ${telemetry.ip} | ${telemetry.city}, ${telemetry.country}]`, 'LOGIN');
                 sendAdminLoginEmailAlert(telemetry);
                 renderLogs();
             }).catch(() => {});
