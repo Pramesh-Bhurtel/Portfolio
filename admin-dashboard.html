@@ -1453,9 +1453,21 @@
             // Attempt Firebase connection
             const { db } = await initFirebase();
 
-            if (db) {
-                setFirebaseStatus('online');
+            let metricsReceived = false;
 
+            // 4-second safety timeout if database rules or network slow down
+            const connTimeout = setTimeout(() => {
+                if (!metricsReceived) {
+                    setFirebaseStatus('offline');
+                    applyMetrics({
+                        total_visits: store.projects.length ? 1 : 0,
+                        cv_downloads: 0,
+                        form_submissions: 0
+                    });
+                }
+            }, 4000);
+
+            if (db) {
                 // Bind real-time projects listener
                 projectsUnsubscribe = await onProjectsChange((projects) => {
                     renderProjects(projects);
@@ -1463,11 +1475,14 @@
 
                 // Bind real-time metrics listener
                 metricsUnsubscribe = await onMetricsChange((metrics) => {
+                    metricsReceived = true;
+                    clearTimeout(connTimeout);
+                    setFirebaseStatus('online');
                     applyMetrics(metrics);
                 });
             } else {
+                clearTimeout(connTimeout);
                 setFirebaseStatus('offline');
-                // Show dashes in metric cards to indicate offline
                 applyMetrics({ total_visits: null, cv_downloads: null, form_submissions: null });
             }
         })();
